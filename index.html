@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>汉堡王外卖 - 全品类商品（带购物车累计）</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="样式表.css">
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <header class="top-header">
+    <div class="container">
+      <div class="header-left">
+        <a href="#" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="delivery-tabs">
+          <span class="tab active">配送</span>
+          <span class="tab">自提</span>
+        </div>
+        <span class="tip">更省不用等</span>
+      </div>
+      <div class="header-right">
+        <a href="#" class="icon-btn"><i class="fas fa-search"></i></a>
+        <a href="#" class="icon-btn"><i class="fas fa-ticket-alt"></i></a>
+        <a href="#" class="icon-btn"><i class="fas fa-star"></i></a>
+        <a href="#" class="icon-btn"><i class="fas fa-user"></i></a>
+        <a href="#" class="icon-btn"><i class="fas fa-ellipsis-h"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 分类导航+内容区 -->
+  <div class="main-container container">
+    <!-- 左侧分类栏 -->
+    <aside class="category-sidebar">
+      <div class="category-title">
+        <span class="active">外卖</span>
+        <span>点评500+</span>
+        <span>商家</span>
+      </div>
+      <ul class="category-list">
+        <li class="category-item active" data-category="subsidy">
+          <i class="icon-hot">🔥</i>百亿补贴
+        </li>
+        <li class="category-item" data-category="discount">
+          <i class="icon-discount">💎</i>折扣
+        </li>
+        <li class="category-item" data-category="spicy">湘辣上新</li>
+        <li class="category-item" data-category="vitality">元气满满</li>
+        <li class="category-item" data-category="single">单人餐</li>
+        <li class="category-item" data-category="welfare">塔塔福利</li>
+        <li class="category-item" data-category="premium">塔堡臻选</li>
+        <li class="category-item" data-category="angus">安格斯牛</li>
+        <li class="category-item" data-category="burger">汉堡</li>
+        <li class="category-item" data-category="group">多人餐</li>
+        <li class="category-item" data-category="snack">小食</li>
+        <li class="category-item" data-category="chicken">全鸡/半鸡</li>
+      </ul>
+    </aside>
+
+    <!-- 右侧商品区（分分类显示） -->
+    <main class="goods-content">
+      <!-- 百亿补贴分类 -->
+      <div class="category-block" id="subsidy">
+        <div class="banner">
+          <img src="https://img11.360buyimg.com/imagetools/jfs/t1/208024/33/25333/44159/647d2259F801c8370/8c299782c4d14781.png" alt="就爱中国堡">
+        </div>
+        <div class="banner-tip">官方补贴一口价，不参加满减，超出部分需按原价购买</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="1" data-name="【与泥尝新】自选汉堡+新款土豆泥+小食" data-price="15.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX91hUc9s9s9s_!!6000000004759-2-tps-300-300.jpg" alt="自选汉堡套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">爆品一口价</span><span class="tag-yellow">外卖</span></div>
+              <h3 class="goods-name">【与"泥"尝新】自选汉堡+新款土豆泥+小食</h3>
+              <div class="goods-meta">2000+人想买</div>
+              <div class="goods-discount">8折起限1件</div>
+              <div class="goods-price">
+                <span class="current-price">¥15.9起</span>
+                <span class="original-price">¥19.9</span>
+                <span class="subsidy">已补¥4</span>
+              </div>
+              <div class="goods-note">请升级APP后购买</div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="2" data-name="【双堡随心选】7选2" data-price="12.4">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN010a7zX81zX9z9z9z9_!!6000000006029-2-tps-300-300.jpg" alt="双堡随心选"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">爆品一口价</span><span class="tag-yellow">外卖</span></div>
+              <h3 class="goods-name">【双堡随心选】7选2</h3>
+              <div class="goods-meta">50万+人想买</div>
+              <div class="goods-discount">4.2折起限1件</div>
+              <div class="goods-price">
+                <span class="current-price">¥12.4起</span>
+                <span class="original-price">¥30</span>
+                <span class="subsidy">已补¥17.6</span>
+              </div>
+              <div class="goods-note">请升级APP后购买</div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品3 -->
+          <div class="goods-item" data-id="3" data-name="【元气满满大套餐】爆款汉堡自选+缤纷小食" data-price="13.6">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX71hUc9s9s9s_!!6000000004758-2-tps-300-300.jpg" alt="元气满满大套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">爆品一口价</span><span class="tag-yellow">外卖</span></div>
+              <h3 class="goods-name">【元气满满大套餐】爆款汉堡自选+缤纷小食</h3>
+              <div class="goods-meta">50万+人想买</div>
+              <div class="goods-discount">7.7折起限1件</div>
+              <div class="goods-price">
+                <span class="current-price">¥13.6起</span>
+                <span class="original-price">¥17.85</span>
+                <span class="subsidy">已补¥4.25</span>
+              </div>
+              <div class="goods-note">请升级APP后购买</div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品4 -->
+          <div class="goods-item" data-id="4" data-name="【香辣鸡腿堡】单人套餐+可乐+薯条" data-price="14.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01iZ7qX61hUc9s9s9s_!!6000000004757-2-tps-300-300.jpg" alt="香辣鸡腿堡套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">爆品一口价</span><span class="tag-yellow">外卖</span></div>
+              <h3 class="goods-name">【香辣鸡腿堡】单人套餐+可乐+薯条</h3>
+              <div class="goods-meta">30万+人想买</div>
+              <div class="goods-discount">6.5折起限1件</div>
+              <div class="goods-price">
+                <span class="current-price">¥14.9起</span>
+                <span class="original-price">¥22.9</span>
+                <span class="subsidy">已补¥8</span>
+              </div>
+              <div class="goods-note">请升级APP后购买</div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 折扣分类 -->
+      <div class="category-block" id="discount" style="display: none;">
+        <div class="block-title">折扣专区</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="5" data-name="【薯条买一送一】中份薯条*2" data-price="9.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01Z7qX51hUc9s9s9s_!!6000000004756-2-tps-300-300.jpg" alt="薯条买一送一"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-blue">限时折扣</span></div>
+              <h3 class="goods-name">【薯条买一送一】中份薯条*2</h3>
+              <div class="goods-meta">10万+人想买</div>
+              <div class="goods-discount">5折限2件</div>
+              <div class="goods-price">
+                <span class="current-price">¥9.9</span>
+                <span class="original-price">¥19.8</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="6" data-name="【可乐畅饮杯】无限续杯（堂食）" data-price="6.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01iZ7qX41hUc9s9s9s_!!6000000004755-2-tps-300-300.jpg" alt="可乐畅饮杯"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-blue">限时折扣</span></div>
+              <h3 class="goods-name">【可乐畅饮杯】无限续杯（堂食）</h3>
+              <div class="goods-meta">5万+人想买</div>
+              <div class="goods-discount">7折限1件</div>
+              <div class="goods-price">
+                <span class="current-price">¥6.9</span>
+                <span class="original-price">¥9.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品3 -->
+          <div class="goods-item" data-id="7" data-name="【鸡米花+可乐】小食套餐" data-price="8.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX31hUc9s9s9s_!!6000000004754-2-tps-300-300.jpg" alt="鸡米花套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-blue">限时折扣</span></div>
+              <h3 class="goods-name">【鸡米花+可乐】小食套餐</h3>
+              <div class="goods-meta">8万+人想买</div>
+              <div class="goods-discount">6折限3件</div>
+              <div class="goods-price">
+                <span class="current-price">¥8.9</span>
+                <span class="original-price">¥14.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 湘辣上新分类 -->
+      <div class="category-block" id="spicy" style="display: none;">
+        <div class="block-title">湘辣上新</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="8" data-name="【湘辣鸡腿堡】川湘风味+辣度可选" data-price="16.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX21hUc9s9s9s_!!6000000004753-2-tps-300-300.jpg" alt="湘辣鸡腿堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-green">新品</span></div>
+              <h3 class="goods-name">【湘辣鸡腿堡】川湘风味+辣度可选</h3>
+              <div class="goods-meta">2万+人想买</div>
+              <div class="goods-discount">尝鲜价</div>
+              <div class="goods-price">
+                <span class="current-price">¥16.9</span>
+                <span class="original-price">¥19.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="9" data-name="【湘辣鸡翅】4块装+香辣蘸酱" data-price="12.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX11hUc9s9s9s_!!6000000004752-2-tps-300-300.jpg" alt="香辣鸡翅"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-green">新品</span></div>
+              <h3 class="goods-name">【湘辣鸡翅】4块装+香辣蘸酱</h3>
+              <div class="goods-meta">1.5万+人想买</div>
+              <div class="goods-discount">尝鲜价</div>
+              <div class="goods-price">
+                <span class="current-price">¥12.9</span>
+                <span class="original-price">¥15.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 元气满满分类 -->
+      <div class="category-block" id="vitality" style="display: none;">
+        <div class="block-title">元气满满</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="10" data-name="【元气早餐全餐】汉堡+薯饼+豆浆" data-price="12.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01Z7qX01hUc9s9s9s_!!6000000004751-2-tps-300-300.jpg" alt="早餐全餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-purple">早餐专享</span></div>
+              <h3 class="goods-name">【元气早餐全餐】汉堡+薯饼+豆浆</h3>
+              <div class="goods-meta">5万+人想买</div>
+              <div class="goods-discount">早鸟价</div>
+              <div class="goods-price">
+                <span class="current-price">¥12.9</span>
+                <span class="original-price">¥16.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="11" data-name="【能量早餐】鸡肉卷+咖啡+油条" data-price="10.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX91hUc9s9s9s_!!6000000004750-2-tps-300-300.jpg" alt="能量早餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-purple">早餐专享</span></div>
+              <h3 class="goods-name">【能量早餐】鸡肉卷+咖啡+油条</h3>
+              <div class="goods-meta">3万+人想买</div>
+              <div class="goods-discount">早鸟价</div>
+              <div class="goods-price">
+                <span class="current-price">¥10.9</span>
+                <span class="original-price">¥14.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 单人餐分类 -->
+      <div class="category-block" id="single" style="display: none;">
+        <div class="block-title">单人餐</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="12" data-name="【经典单人餐】皇堡+中可+小薯" data-price="22.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX81hUc9s9s9s_!!6000000004749-2-tps-300-300.jpg" alt="经典单人餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-orange">单人专享</span></div>
+              <h3 class="goods-name">【经典单人餐】皇堡+中可+小薯</h3>
+              <div class="goods-meta">20万+人想买</div>
+              <div class="goods-discount">套餐价</div>
+              <div class="goods-price">
+                <span class="current-price">¥22.9</span>
+                <span class="original-price">¥28.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="13" data-name="【芝士堡单人餐】芝士牛堡+可乐+鸡米花" data-price="24.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX71hUc9s9s9s_!!6000000004748-2-tps-300-300.jpg" alt="芝士堡单人餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-orange">单人专享</span></div>
+              <h3 class="goods-name">【芝士堡单人餐】芝士牛堡+可乐+鸡米花</h3>
+              <div class="goods-meta">15万+人想买</div>
+              <div class="goods-discount">套餐价</div>
+              <div class="goods-price">
+                <span class="current-price">¥24.9</span>
+                <span class="original-price">¥31.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 塔塔福利分类 -->
+      <div class="category-block" id="welfare" style="display: none;">
+        <div class="block-title">塔塔福利</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="14" data-name="【积分兑换】小份薯条（50积分）" data-price="0">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01Z7qX61hUc9s9s9s_!!6000000004747-2-tps-300-300.jpg" alt="积分兑换薯条"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-gray">积分兑换</span></div>
+              <h3 class="goods-name">【积分兑换】小份薯条（50积分）</h3>
+              <div class="goods-meta">1万+人兑换</div>
+              <div class="goods-price">
+                <span class="current-price">50积分</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="15" data-name="【满30减5】无门槛优惠券" data-price="0">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX61hUc9s9s9s_!!6000000004746-2-tps-300-300.jpg" alt="满减券"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-gray">福利券</span></div>
+              <h3 class="goods-name">【满30减5】无门槛优惠券</h3>
+              <div class="goods-meta">3万+人领取</div>
+              <div class="goods-price">
+                <span class="current-price">免费领取</span>
+              </div>
+              <button class="add-cart-btn">领</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 塔堡臻选分类 -->
+      <div class="category-block" id="premium" style="display: none;">
+        <div class="block-title">塔堡臻选</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="16" data-name="【黑松露和牛堡】限定款+特调酱汁" data-price="39.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX51hUc9s9s9s_!!6000000004745-2-tps-300-300.jpg" alt="黑松露汉堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-gold">臻选</span></div>
+              <h3 class="goods-name">【黑松露和牛堡】限定款+特调酱汁</h3>
+              <div class="goods-meta">5000+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥39.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="17" data-name="【鹅肝牛堡】进口鹅肝+安格斯牛肉" data-price="49.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX51hUc9s9s9s_!!6000000004744-2-tps-300-300.jpg" alt="鹅肝汉堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-gold">臻选</span></div>
+              <h3 class="goods-name">【鹅肝牛堡】进口鹅肝+安格斯牛肉</h3>
+              <div class="goods-meta">3000+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥49.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 安格斯牛分类 -->
+      <div class="category-block" id="angus" style="display: none;">
+        <div class="block-title">安格斯牛</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="18" data-name="【安格斯经典牛堡】150g牛肉+芝士" data-price="29.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01Z7qX41hUc9s9s9s_!!6000000004743-2-tps-300-300.jpg" alt="安格斯牛堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-brown">安格斯</span></div>
+              <h3 class="goods-name">【安格斯经典牛堡】150g牛肉+芝士</h3>
+              <div class="goods-meta">8万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥29.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="19" data-name="【安格斯套餐】牛堡+薯条+可乐+甜点" data-price="45.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX41hUc9s9s9s_!!6000000004742-2-tps-300-300.jpg" alt="安格斯套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-brown">安格斯</span></div>
+              <h3 class="goods-name">【安格斯套餐】牛堡+薯条+可乐+甜点</h3>
+              <div class="goods-meta">5万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥45.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 汉堡分类 -->
+      <div class="category-block" id="burger" style="display: none;">
+        <div class="block-title">汉堡</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="20" data-name="【皇堡】双层牛肉+蔬菜+特调酱" data-price="25.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX31hUc9s9s9s_!!6000000004741-2-tps-300-300.jpg" alt="皇堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">经典</span></div>
+              <h3 class="goods-name">【皇堡】双层牛肉+蔬菜+特调酱</h3>
+              <div class="goods-meta">30万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥25.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="21" data-name="【藤椒鸡腿堡】香辣藤椒风味+脆鸡" data-price="18.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX31hUc9s9s9s_!!6000000004740-2-tps-300-300.jpg" alt="鸡肉汉堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">经典</span></div>
+              <h3 class="goods-name">【藤椒鸡腿堡】香辣藤椒风味+脆鸡</h3>
+              <div class="goods-meta">20万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥18.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品3 -->
+          <div class="goods-item" data-id="22" data-name="【素食汉堡】植物肉+蔬菜+全麦面包" data-price="19.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01Z7qX21hUc9s9s9s_!!6000000004739-2-tps-300-300.jpg" alt="素食汉堡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-green">素食</span></div>
+              <h3 class="goods-name">【素食汉堡】植物肉+蔬菜+全麦面包</h3>
+              <div class="goods-meta">2万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥19.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 多人餐分类 -->
+      <div class="category-block" id="group" style="display: none;">
+        <div class="block-title">多人餐</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="23" data-name="【3人欢聚餐】3汉堡+2薯条+3可乐+小食" data-price="69.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX21hUc9s9s9s_!!6000000004738-2-tps-300-300.jpg" alt="3人餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">多人专享</span></div>
+              <h3 class="goods-name">【3人欢聚餐】3汉堡+2薯条+3可乐+小食</h3>
+              <div class="goods-meta">10万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥69.9</span>
+                <span class="original-price">¥89.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="24" data-name="【5人豪华餐】5汉堡+3薯条+5可乐+全鸡" data-price="129.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX11hUc9s9s9s_!!6000000004737-2-tps-300-300.jpg" alt="5人餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">多人专享</span></div>
+              <h3 class="goods-name">【5人豪华餐】5汉堡+3薯条+5可乐+全鸡</h3>
+              <div class="goods-meta">5万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥129.9</span>
+                <span class="original-price">¥159.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 小食分类 -->
+      <div class="category-block" id="snack" style="display: none;">
+        <div class="block-title">小食</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="25" data-name="【鸡米花】大份装+香辣蘸酱" data-price="10.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX11hUc9s9s9s_!!6000000004736-2-tps-300-300.jpg" alt="鸡米花"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-yellow">小食</span></div>
+              <h3 class="goods-name">【鸡米花】大份装+香辣蘸酱</h3>
+              <div class="goods-meta">15万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥10.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="26" data-name="【洋葱圈】酥脆口感+芝士酱" data-price="8.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i2/O1CN01Z7qX01hUc9s9s9s_!!6000000004735-2-tps-300-300.jpg" alt="洋葱圈"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-yellow">小食</span></div>
+              <h3 class="goods-name">【洋葱圈】酥脆口感+芝士酱</h3>
+              <div class="goods-meta">8万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥8.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品3 -->
+          <div class="goods-item" data-id="27" data-name="【薯角】香酥调味+蜂蜜芥末酱" data-price="9.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i3/O1CN01xZ7qX01hUc9s9s9s_!!6000000004734-2-tps-300-300.jpg" alt="薯角"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-yellow">小食</span></div>
+              <h3 class="goods-name">【薯角】香酥调味+蜂蜜芥末酱</h3>
+              <div class="goods-meta">6万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥9.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 全鸡/半鸡分类 -->
+      <div class="category-block" id="chicken" style="display: none;">
+        <div class="block-title">全鸡/半鸡</div>
+        <div class="goods-list">
+          <!-- 商品1 -->
+          <div class="goods-item" data-id="28" data-name="【脆皮全鸡】整只炸鸡+香辣/原味" data-price="29.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i4/O1CN01Z7qX91hUc9s9s9s_!!6000000004733-2-tps-300-300.jpg" alt="脆皮全鸡"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">招牌</span></div>
+              <h3 class="goods-name">【脆皮全鸡】整只炸鸡+香辣/原味</h3>
+              <div class="goods-meta">10万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥29.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+          <!-- 商品2 -->
+          <div class="goods-item" data-id="29" data-name="【半鸡套餐】半只炸鸡+可乐+小食" data-price="22.9">
+            <div class="goods-img"><img src="https://img.alicdn.com/imgextra/i1/O1CN01iZ7qX01hUc9s9s9s_!!6000000004732-2-tps-300-300.jpg" alt="半鸡套餐"></div>
+            <div class="goods-info">
+              <div class="goods-tag"><span class="tag-red">招牌</span></div>
+              <h3 class="goods-name">【半鸡套餐】半只炸鸡+可乐+小食</h3>
+              <div class="goods-meta">7万+人想买</div>
+              <div class="goods-price">
+                <span class="current-price">¥22.9</span>
+              </div>
+              <button class="add-cart-btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 底部优惠栏 -->
+  <div class="footer-banner">
+    <div class="container">
+      <i class="fas fa-fire"></i>
+      <span>本店优惠 满20减17、满20减17、满30减20</span>
+    </div>
+  </div>
+
+  <!-- 悬浮购物车栏（新增数量和总价） -->
+  <div class="cart-bar" id="cartBar">
+    <div class="container">
+      <div class="cart-left" id="cartIcon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+        <span class="free-fee">免运费</span>
+      </div>
+      <div class="cart-middle">
+        <span class="total-price">¥0.00</span>
+      </div>
+      <div class="cart-right">
+        <span>20元起送</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 购物车弹窗（新增） -->
+  <div class="cart-modal-mask" id="cartModalMask" style="display: none;"></div>
+  <div class="cart-modal" id="cartModal" style="display: none;">
+    <div class="modal-header">
+      <h3>我的购物车</h3>
+      <span class="close-modal" id="closeModal">×</span>
+    </div>
+    <div class="modal-body" id="cartList">
+      <!-- 购物车空状态 -->
+      <div class="cart-empty">
+        <i class="fas fa-shopping-bag"></i>
+        <p>购物车还是空的，快去挑选商品吧~</p>
+      </div>
+      <!-- 购物车商品列表（JS动态生成） -->
+    </div>
+    <div class="modal-footer">
+      <button class="clear-cart" id="clearCart">清空购物车</button>
+      <div class="footer-total">
+        <span>合计：</span>
+        <span class="footer-total-price">¥0.00</span>
+      </div>
+      <button class="submit-order">去结算</button>
+    </div>
+  </div>
+
+  <script src="交互使用.js"></script>
+</body>
+</html>
