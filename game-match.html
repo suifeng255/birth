@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生肖消消乐 - 马年新春小游戏</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5eedc 0%, #f8f5f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            font-size: clamp(24px, 5vw, 36px);
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* 游戏容器 */
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 分数显示 */
+        .game-score {
+            font-size: 20px;
+            color: #e67e22;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+            background-color: #f5eedc;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            width: 100%;
+            min-height: clamp(300px, 70vw, 500px);
+            background-color: #f8f5f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 消消乐网格 - 固定4列适配全端 */
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+        }
+
+        /* 卡片样式 - 3D翻牌效果 */
+        .match-card {
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(24px, 6vw, 36px);
+            color: transparent;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            transform: rotateY(0deg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .match-card.flipped {
+            background: linear-gradient(90deg, #f1c40f, #f39c12);
+            color: #fff;
+            transform: rotateY(180deg);
+        }
+
+        .match-card.matched {
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            color: #fff;
+            transform: rotateY(180deg) scale(0.96);
+            pointer-events: none;
+        }
+
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+
+        .game-btn {
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 100px;
+            transition: background 0.3s ease;
+        }
+
+        .game-btn:hover {
+            background: linear-gradient(90deg, #d35400, #e67e22);
+        }
+
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 小屏适配 */
+        @media screen and (max-width: 480px) {
+            .match-grid {
+                gap: 8px;
+            }
+            .game-btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-header">
+        <a href="main.html" class="back-btn">← 返回主页面</a>
+        <h1 class="game-title">生肖消消乐 🐴</h1>
+    </div>
+
+    <div class="game-container">
+        <div class="game-score" id="matchScore">得分：0</div>
+        
+        <div class="game-area">
+            <div class="match-grid" id="matchGrid"></div>
+        </div>
+
+        <div class="game-controls">
+            <button class="game-btn" id="startMatchGame">开始</button>
+            <button class="game-btn" id="pauseMatchGame" disabled>暂停</button>
+            <button class="game-btn" id="resetMatchGame" disabled>重置</button>
+        </div>
+    </div>
+
+    <script>
+        // 十二生肖图标数据（马年突出🐴）
+        const zodiacIcons = ['🐭', '🐂', '🐯', '🐰', '🐲', '🐍', '🐴', '🐑', '🐵', '🐔', '🐶', '🐷'];
+
+        // DOM元素获取
+        const matchScore = document.getElementById('matchScore');
+        const matchGrid = document.getElementById('matchGrid');
+        const startMatchGame = document.getElementById('startMatchGame');
+        const pauseMatchGame = document.getElementById('pauseMatchGame');
+        const resetMatchGame = document.getElementById('resetMatchGame');
+
+        // 游戏全局状态变量
+        let mgGameScore = 0;
+        let mgGameRunning = false;
+        let mgGamePaused = false;
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let gameCards = [];
+
+        // 绑定游戏控制按钮事件
+        startMatchGame.addEventListener('click', function() {
+            if (!mgGameRunning) {
+                startMatchGameFunc();
+            } else if (mgGamePaused) {
+                resumeMatchGame();
+            }
+        });
+
+        pauseMatchGame.addEventListener('click', pauseMatchGameFunc);
+        resetMatchGame.addEventListener('click', resetMatchGameFunc);
+
+        // 开始游戏核心逻辑
+        function startMatchGameFunc() {
+            mgGameRunning = true;
+            mgGamePaused = false;
+            mgGameScore = 0;
+            matchedPairs = 0;
+            flippedCards = [];
+            updateMatchScore();
+            generateMatchCards();
+
+            // 更新按钮状态
+            startMatchGame.textContent = '继续';
+            pauseMatchGame.disabled = false;
+            resetMatchGame.disabled = false;
+        }
+
+        // 暂停游戏核心逻辑
+        function pauseMatchGameFunc() {
+            if (mgGameRunning && !mgGamePaused) {
+                mgGamePaused = true;
+                startMatchGame.textContent = '继续';
+                // 卡片半透明+禁止点击
+                gameCards.forEach(card => {
+                    card.style.opacity = '0.5';
+                    card.style.pointerEvents = 'none';
+                });
+            }
+        }
+
+        // 恢复游戏核心逻辑
+        function resumeMatchGame() {
+            mgGamePaused = false;
+            startMatchGame.textContent = '继续';
+            // 恢复卡片样式+允许点击
+            gameCards.forEach(card => {
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+            });
+        }
+
+        // 停止游戏核心逻辑
+        function stopMatchGame() {
+            mgGameRunning = false;
+            mgGamePaused = false;
+            mgGameScore = 0;
+            matchedPairs = 0;
+            flippedCards = [];
+            updateMatchScore();
+            matchGrid.innerHTML = '';
+
+            // 重置按钮初始状态
+            startMatchGame.textContent = '开始';
+            pauseMatchGame.disabled = true;
+            resetMatchGame.disabled = true;
+        }
+
+        // 重置游戏核心逻辑
+        function resetMatchGameFunc() {
+            stopMatchGame();
+            startMatchGameFunc();
+        }
+
+        // 生成消消乐卡片（8对=16张，随机选生肖）
+        function generateMatchCards() {
+            matchGrid.innerHTML = '';
+            gameCards = [];
+            // 随机筛选8个生肖，生成配对数组并打乱顺序
+            const randomZodiacs = [...zodiacIcons].sort(() => 0.5 - Math.random()).slice(0, 8);
+            const pairZodiacs = [...randomZodiacs, ...randomZodiacs].sort(() => 0.5 - Math.random());
+
+            // 循环创建卡片DOM
+            pairZodiacs.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.dataset.index = index;
+                card.dataset.icon = icon;
+                card.textContent = icon;
+                // 绑定翻牌事件
+                card.addEventListener('click', () => flipCard(card));
+                matchGrid.appendChild(card);
+                gameCards.push(card);
+            });
+        }
+
+        // 卡片翻牌核心逻辑（含配对检测、计分）
+        function flipCard(card) {
+            // 过滤不可翻牌场景：暂停/已翻2张/已翻/已配对
+            if (mgGamePaused || flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) {
+                return;
+            }
+
+            // 执行翻牌
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            // 检测两张卡片是否配对
+            if (flippedCards.length === 2) {
+                const [card1, card2] = flippedCards;
+                // 配对成功
+                if (card1.dataset.icon === card2.dataset.icon) {
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    matchedPairs++;
+                    mgGameScore += 20; // 配对成功+20分
+                    updateMatchScore();
+
+                    // 通关判定：8对全部配对完成
+                    if (matchedPairs === 8) {
+                        setTimeout(() => {
+                            alert(`恭喜你！生肖消消乐通关啦～\n最终得分：${mgGameScore}`);
+                            stopMatchGame(); // 通关后重置游戏
+                        }, 500);
+                    }
+                } else {
+                    // 配对失败，延迟翻回并扣分
+                    setTimeout(() => {
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
+                        mgGameScore = Math.max(0, mgGameScore - 5); // 配对失败-5分，最低0分
+                        updateMatchScore();
+                    }, 800); // 延迟800ms，让用户看清翻牌结果
+                }
+                // 清空已翻牌数组，准备下一次翻牌
+                flippedCards = [];
+            }
+        }
+
+        // 更新分数显示
+        function updateMatchScore() {
+            matchScore.textContent = `得分：${mgGameScore}`;
+        }
+    </script>
+</body>
+</html>

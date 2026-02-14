@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜灯谜 - 马年新春小游戏</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5eedc 0%, #f8f5f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            font-size: clamp(24px, 5vw, 36px);
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* 游戏容器 */
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 分数显示 */
+        .game-score {
+            font-size: 20px;
+            color: #e67e22;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+            background-color: #f5eedc;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            width: 100%;
+            background-color: #f8f5f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        /* 答题进度 */
+        .riddle-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e67e22, #f1c40f);
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 题目样式 */
+        .riddle-question {
+            font-size: clamp(18px, 3vw, 24px);
+            color: #e67e22;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5eedc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* 选项样式 */
+        .riddle-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .riddle-option {
+            padding: 15px;
+            background-color: #fff;
+            border: 2px solid #f1c40f;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .riddle-option:hover {
+            background-color: #f5eedc;
+        }
+
+        .riddle-option.correct {
+            background-color: #4CAF50;
+            color: #fff;
+            border-color: #4CAF50;
+        }
+
+        .riddle-option.incorrect {
+            background-color: #f44336;
+            color: #fff;
+            border-color: #f44336;
+        }
+
+        /* 反馈样式 */
+        .riddle-feedback {
+            font-size: 18px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .riddle-feedback.show {
+            display: block;
+        }
+
+        .riddle-feedback.correct {
+            background-color: #e8f5e9;
+            color: #4CAF50;
+        }
+
+        .riddle-feedback.incorrect {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        /* 按钮样式 */
+        .game-btn {
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 结果样式 */
+        .riddle-result {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5eedc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .riddle-result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 20px;
+            color: #e67e22;
+            margin-bottom: 15px;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-header">
+        <a href="main.html" class="back-btn">← 返回主页面</a>
+        <h1 class="game-title">猜灯谜 🎋</h1>
+    </div>
+
+    <div class="game-container">
+        <div class="game-score" id="riddleScore">答对：0 / 0</div>
+        
+        <div class="game-area">
+            <div class="riddle-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="riddleProgress"></div>
+                </div>
+                <div class="progress-text" id="progressText">1/5</div>
+            </div>
+
+            <div class="riddle-question" id="riddleQuestion"></div>
+
+            <div class="riddle-options" id="riddleOptions"></div>
+
+            <div class="riddle-feedback" id="riddleFeedback"></div>
+
+            <button class="game-btn" id="nextRiddleBtn" disabled>下一题</button>
+
+            <div class="riddle-result" id="riddleResult">
+                <h4 class="result-title">答题结果</h4>
+                <div class="result-stats">
+                    <div class="result-item">正确率：<span id="accuracyRate">0</span>%</div>
+                    <div class="result-item">答题用时：<span id="totalTime">0</span>秒</div>
+                </div>
+                <button class="game-btn" id="restartRiddleBtn">重新答题</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 灯谜数据（马年版）
+        const riddleData = [
+            {
+                question: "成天一直骂，骂到两边都没有嘴（打一字）",
+                options: ["马", "骂", "驰", "吗"],
+                answer: 0,
+                explanation: "“骂”字两边的口（嘴）都去掉，就是“马”字。"
+            },
+            {
+                question: "马年拜年（打一作家名）",
+                options: ["老舍", "巴金", "冰心", "鲁迅"],
+                answer: 2,
+                explanation: "拜年就是向人祝贺新年，“冰心”谐音“迎新”，符合拜年的寓意。"
+            },
+            {
+                question: "一马当先（打一节日）",
+                options: ["春节", "端午", "中秋", "元宵"],
+                answer: 0,
+                explanation: "一马当先对应马年的春节，寓意新年事事领先。"
+            },
+            {
+                question: "马年迎春（打一字）",
+                options: ["骄", "驶", "驰", "驴"],
+                answer: 0,
+                explanation: "马年迎春，马+乔（乔有高大、喜庆之意）=骄，寓意马年骄傲前行。"
+            },
+            {
+                question: "马到成功（打一数字）",
+                options: ["6", "8", "9", "7"],
+                answer: 1,
+                explanation: "8谐音“发”，马到成功寓意发财顺利，所以答案是8。"
+            }
+        ];
+
+        // DOM元素获取
+        const riddleScore = document.getElementById('riddleScore');
+        const riddleQuestion = document.getElementById('riddleQuestion');
+        const riddleOptions = document.getElementById('riddleOptions');
+        const riddleFeedback = document.getElementById('riddleFeedback');
+        const nextRiddleBtn = document.getElementById('nextRiddleBtn');
+        const riddleProgress = document.getElementById('riddleProgress');
+        const progressText = document.getElementById('progressText');
+        const riddleResult = document.getElementById('riddleResult');
+        const accuracyRate = document.getElementById('accuracyRate');
+        const totalTime = document.getElementById('totalTime');
+        const restartRiddleBtn = document.getElementById('restartRiddleBtn');
+
+        // 游戏状态变量
+        let currentRiddleIndex = 0;
+        let riddleCorrectCount = 0;
+        let riddleStartTime = 0;
+        let riddleTotalTime = 0;
+
+        // 初始化游戏
+        resetRiddleGame();
+
+        // 下一题按钮事件
+        nextRiddleBtn.addEventListener('click', function() {
+            currentRiddleIndex++;
+            if (currentRiddleIndex >= riddleData.length) {
+                // 游戏结束，计算结果
+                riddleTotalTime = Math.floor((new Date().getTime() - riddleStartTime) / 1000);
+                const accuracy = Math.floor((riddleCorrectCount / riddleData.length) * 100);
+                accuracyRate.textContent = accuracy;
+                totalTime.textContent = riddleTotalTime;
+                riddleResult.style.display = 'block';
+                return;
+            }
+            // 下一题
+            showCurrentRiddle();
+            riddleFeedback.classList.remove('show', 'correct', 'incorrect');
+            nextRiddleBtn.disabled = true;
+            updateRiddleProgress();
+        });
+
+        // 重新答题按钮事件
+        restartRiddleBtn.addEventListener('click', function() {
+            riddleResult.style.display = 'none';
+            resetRiddleGame();
+        });
+
+        // 重置游戏
+        function resetRiddleGame() {
+            currentRiddleIndex = 0;
+            riddleCorrectCount = 0;
+            riddleTotalTime = 0;
+            riddleStartTime = new Date().getTime();
+            showCurrentRiddle();
+            riddleFeedback.classList.remove('show', 'correct', 'incorrect');
+            nextRiddleBtn.disabled = true;
+            updateRiddleScore();
+            updateRiddleProgress();
+        }
+
+        // 显示当前题目
+        function showCurrentRiddle() {
+            const riddle = riddleData[currentRiddleIndex];
+            riddleQuestion.textContent = riddle.question;
+            riddleOptions.innerHTML = '';
+
+            // 生成选项
+            riddle.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'riddle-option';
+                optionEl.dataset.index = index;
+                optionEl.textContent = option;
+
+                optionEl.addEventListener('click', function() {
+                    if (document.querySelector('.riddle-option.correct')) return;
+                    const selectedIdx = parseInt(this.dataset.index);
+                    const isCorrect = selectedIdx === riddle.answer;
+
+                    // 标记答案
+                    if (isCorrect) {
+                        this.classList.add('correct');
+                        riddleCorrectCount++;
+                        riddleFeedback.textContent = `恭喜你，答对了！${riddle.explanation}`;
+                        riddleFeedback.classList.add('show', 'correct');
+                    } else {
+                        this.classList.add('incorrect');
+                        document.querySelectorAll('.riddle-option')[riddle.answer].classList.add('correct');
+                        riddleFeedback.textContent = `答错啦～正确答案：${riddle.options[riddle.answer]}。${riddle.explanation}`;
+                        riddleFeedback.classList.add('show', 'incorrect');
+                    }
+
+                    updateRiddleScore();
+                    nextRiddleBtn.disabled = false;
+                });
+
+                riddleOptions.appendChild(optionEl);
+            });
+        }
+
+        // 更新分数
+        function updateRiddleScore() {
+            riddleScore.textContent = `答对：${riddleCorrectCount} / ${currentRiddleIndex + 1}`;
+        }
+
+        // 更新进度条
+        function updateRiddleProgress() {
+            const progress = ((currentRiddleIndex + 1) / riddleData.length) * 100;
+            riddleProgress.style.width = `${progress}%`;
+            progressText.textContent = `${currentRiddleIndex + 1}/${riddleData.length}`;
+        }
+    </script>
+</body>
+</html>

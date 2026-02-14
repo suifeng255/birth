@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>接红包 - 马年新春小游戏</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5eedc 0%, #f8f5f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            font-size: clamp(24px, 5vw, 36px);
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* 游戏容器 */
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 分数显示 */
+        .game-score {
+            font-size: 20px;
+            color: #e67e22;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+            background-color: #f5eedc;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            width: 100%;
+            height: clamp(300px, 60vw, 450px);
+            background-color: #f8f5f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 玩家 */
+        .player {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(50px, 10vw, 80px);
+            height: clamp(50px, 10vw, 80px);
+            background-image: url("https://picsum.photos/seed/player/100/100");
+            background-size: cover;
+            border-radius: 50%;
+            z-index: 10;
+            transition: left 0.1s ease;
+        }
+
+        /* 红包和障碍物 */
+        .red-packet {
+            position: absolute;
+            top: -50px;
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(50px, 10vw, 70px);
+            background-image: url("https://picsum.photos/seed/redpacket/100/120");
+            background-size: cover;
+            animation: fall linear;
+        }
+
+        .obstacle {
+            position: absolute;
+            top: -50px;
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(40px, 8vw, 60px);
+            background-image: url("https://picsum.photos/seed/obstacle/100/100");
+            background-size: cover;
+            animation: fall linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(clamp(300px, 60vw, 450px));
+            }
+        }
+
+        /* 游戏统计 */
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f5eedc;
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            font-size: 16px;
+            color: #e67e22;
+            font-weight: 600;
+        }
+
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .game-btn {
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* 排行榜 */
+        .game-rank {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f5eedc;
+        }
+
+        .rank-title {
+            font-size: 18px;
+            color: #e67e22;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .rank-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rank-list li {
+            padding: 8px 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-left: 3px solid #f1c40f;
+        }
+
+        /* 震动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-5deg); }
+            75% { transform: translateX(-50%) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-header">
+        <a href="main.html" class="back-btn">← 返回主页面</a>
+        <h1 class="game-title">接红包 🧧</h1>
+    </div>
+
+    <div class="game-container">
+        <div class="game-score" id="redPacketScore">得分：0</div>
+        
+        <div class="game-area" id="redPacketGameArea">
+            <div class="player" id="player"></div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-item">已接红包：<span id="redPacketCount">0</span></div>
+            <div class="stat-item">已避障碍：<span id="obstacleCount">0</span></div>
+            <div class="stat-item">游戏时间：<span id="gameTime">0</span>秒</div>
+        </div>
+
+        <div class="game-controls">
+            <button class="game-btn" id="startRedPacketGame">开始</button>
+            <button class="game-btn" id="pauseRedPacketGame" disabled>暂停</button>
+            <button class="game-btn" id="resetRedPacketGame" disabled>重置</button>
+        </div>
+
+        <div class="game-rank">
+            <h3 class="rank-title">排行榜</h3>
+            <ul class="rank-list" id="rankList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素获取
+        const redPacketScore = document.getElementById('redPacketScore');
+        const redPacketGameArea = document.getElementById('redPacketGameArea');
+        const player = document.getElementById('player');
+        const startRedPacketGame = document.getElementById('startRedPacketGame');
+        const pauseRedPacketGame = document.getElementById('pauseRedPacketGame');
+        const resetRedPacketGame = document.getElementById('resetRedPacketGame');
+        const redPacketCount = document.getElementById('redPacketCount');
+        const obstacleCount = document.getElementById('obstacleCount');
+        const gameTime = document.getElementById('gameTime');
+        const rankList = document.getElementById('rankList');
+
+        // 游戏状态变量
+        let rpGameScore = 0;
+        let rpGameInterval = null;
+        let rpGameRunning = false;
+        let rpGamePaused = false;
+        let rpGameTime = 0;
+        let rpTimeInterval = null;
+        let redPacketCatchCount = 0;
+        let obstacleAvoidCount = 0;
+        let rankData = [];
+
+        // 初始化排行榜
+        initRankList();
+
+        // 游戏控制事件
+        startRedPacketGame.addEventListener('click', function() {
+            if (!rpGameRunning) {
+                startRedPacketGameFunc();
+            } else if (rpGamePaused) {
+                resumeRedPacketGame();
+            }
+        });
+
+        pauseRedPacketGame.addEventListener('click', pauseRedPacketGameFunc);
+        resetRedPacketGame.addEventListener('click', resetRedPacketGameFunc);
+
+        // 键盘控制
+        document.addEventListener('keydown', function(e) {
+            if (!rpGameRunning || rpGamePaused) return;
+            const playerRect = player.getBoundingClientRect();
+            const gameAreaRect = redPacketGameArea.getBoundingClientRect();
+            const moveStep = 15;
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    if (playerRect.left > gameAreaRect.left) {
+                        player.style.left = `${player.offsetLeft - moveStep}px`;
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (playerRect.right < gameAreaRect.right) {
+                        player.style.left = `${player.offsetLeft + moveStep}px`;
+                    }
+                    break;
+            }
+        });
+
+        // 移动端触摸控制
+        redPacketGameArea.addEventListener('touchmove', function(e) {
+            if (!rpGameRunning || rpGamePaused) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const gameAreaRect = redPacketGameArea.getBoundingClientRect();
+            const playerHalfWidth = player.offsetWidth / 2;
+            const relativeX = touch.clientX - gameAreaRect.left;
+
+            if (relativeX > playerHalfWidth && relativeX < gameAreaRect.width - playerHalfWidth) {
+                player.style.left = `${relativeX - playerHalfWidth}px`;
+            }
+        });
+
+        // 开始游戏
+        function startRedPacketGameFunc() {
+            rpGameRunning = true;
+            rpGamePaused = false;
+            rpGameScore = 0;
+            rpGameTime = 0;
+            redPacketCatchCount = 0;
+            obstacleAvoidCount = 0;
+            updateRedPacketScore();
+
+            // 重置玩家位置
+            player.style.left = '50%';
+            clearRedPacketGameArea();
+
+            // 生成红包/障碍物定时器
+            rpGameInterval = setInterval(spawnRedPacketOrObstacle, 800);
+            // 游戏计时定时器
+            rpTimeInterval = setInterval(function() {
+                rpGameTime++;
+                gameTime.textContent = rpGameTime;
+            }, 1000);
+
+            // 更新按钮状态
+            startRedPacketGame.textContent = '继续';
+            pauseRedPacketGame.disabled = false;
+            resetRedPacketGame.disabled = false;
+        }
+
+        // 暂停游戏
+        function pauseRedPacketGameFunc() {
+            if (rpGameRunning && !rpGamePaused) {
+                rpGamePaused = true;
+                clearInterval(rpGameInterval);
+                clearInterval(rpTimeInterval);
+
+                // 暂停下落动画
+                document.querySelectorAll('.red-packet, .obstacle').forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                });
+                startRedPacketGame.textContent = '继续';
+            }
+        }
+
+        // 恢复游戏
+        function resumeRedPacketGame() {
+            rpGamePaused = false;
+            rpGameInterval = setInterval(spawnRedPacketOrObstacle, 800);
+            rpTimeInterval = setInterval(function() {
+                rpGameTime++;
+                gameTime.textContent = rpGameTime;
+            }, 1000);
+
+            // 恢复下落动画
+            document.querySelectorAll('.red-packet, .obstacle').forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        }
+
+        // 停止游戏
+        function stopRedPacketGame() {
+            rpGameRunning = false;
+            rpGamePaused = false;
+            clearInterval(rpGameInterval);
+            clearInterval(rpTimeInterval);
+            clearRedPacketGameArea();
+
+            // 重置数据
+            rpGameScore = 0;
+            rpGameTime = 0;
+            redPacketCatchCount = 0;
+            obstacleAvoidCount = 0;
+            updateRedPacketScore();
+            gameTime.textContent = 0;
+            player.style.left = '50%';
+
+            // 重置按钮状态
+            startRedPacketGame.textContent = '开始';
+            pauseRedPacketGame.disabled = true;
+            resetRedPacketGame.disabled = true;
+        }
+
+        // 重置游戏
+        function resetRedPacketGameFunc() {
+            stopRedPacketGame();
+            startRedPacketGameFunc();
+        }
+
+        // 清空游戏区域
+        function clearRedPacketGameArea() {
+            document.querySelectorAll('.red-packet, .obstacle').forEach(el => el.remove());
+        }
+
+        // 生成红包/障碍物
+        function spawnRedPacketOrObstacle() {
+            const gameAreaWidth = redPacketGameArea.offsetWidth;
+            const isRedPacket = Math.random() > 0.3; // 70%红包，30%障碍物
+            const element = document.createElement('div');
+            element.className = isRedPacket ? 'red-packet' : 'obstacle';
+
+            // 随机位置（避免贴边）
+            const randomX = Math.random() * (gameAreaWidth - 80) + 40;
+            element.style.left = `${randomX}px`;
+            // 随机下落速度（2-5秒）
+            const fallDuration = Math.random() * 3 + 2;
+            element.style.animationDuration = `${fallDuration}s`;
+
+            redPacketGameArea.appendChild(element);
+
+            // 碰撞检测
+            const collisionCheck = setInterval(function() {
+                const elRect = element.getBoundingClientRect();
+                const pRect = player.getBoundingClientRect();
+                const gameAreaRect = redPacketGameArea.getBoundingClientRect();
+
+                // 检测碰撞
+                if (elRect.bottom >= pRect.top && elRect.top <= pRect.bottom && elRect.right >= pRect.left && elRect.left <= pRect.right) {
+                    clearInterval(collisionCheck);
+                    element.remove();
+                    if (isRedPacket) {
+                        // 接红包加分
+                        rpGameScore += 10;
+                        redPacketCatchCount++;
+                        updateRedPacketScore();
+                    } else {
+                        // 碰障碍物减分+震动
+                        rpGameScore = Math.max(0, rpGameScore - 5);
+                        updateRedPacketScore();
+                        player.style.animation = 'shake 0.5s';
+                        setTimeout(() => player.style.animation = '', 500);
+                    }
+                }
+
+                // 检测落地
+                if (elRect.top > gameAreaRect.bottom) {
+                    clearInterval(collisionCheck);
+                    element.remove();
+                    if (isRedPacket) {
+                        // 漏接红包减分
+                        rpGameScore = Math.max(0, rpGameScore - 2);
+                        obstacleAvoidCount++;
+                        updateRedPacketScore();
+                    } else {
+                        obstacleAvoidCount++;
+                    }
+                }
+            }, 50);
+
+            // 动画结束移除元素
+            setTimeout(() => element.remove(), fallDuration * 1000);
+        }
+
+        // 更新分数/统计
+        function updateRedPacketScore() {
+            redPacketScore.textContent = `得分：${rpGameScore}`;
+            redPacketCount.textContent = redPacketCatchCount;
+            obstacleCount.textContent = obstacleAvoidCount;
+            // 更新排行榜
+            if (rpGameRunning) {
+                rankData.push({ score: rpGameScore, time: rpGameTime });
+                rankData = rankData.sort((a, b) => b.score - a.score).slice(0, 5);
+                initRankList();
+            }
+        }
+
+        // 初始化排行榜
+        function initRankList() {
+            rankList.innerHTML = '';
+            if (rankData.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = '暂无游戏记录，快来挑战吧！';
+                rankList.appendChild(li);
+                return;
+            }
+            rankData.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>第${index + 1}名</span>
+                    <span>得分：${item.score} | 用时：${item.time}s</span>
+                `;
+                rankList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
