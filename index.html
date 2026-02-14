@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新春旅行 · 甲辰龙年</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", 微软雅黑, "SimHei", 黑体, "STKaiti", 楷体, sans-serif;
+        }
+
+        /* 页面主体样式 - 纯正新春红背景 */
+        body {
+            /* 高饱和度正红渐变背景，保留轻微纹理增加质感 */
+            background: linear-gradient(135deg, #d92121 0%, #c11e1e 50%, #a81a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 核心容器 - 米色卡片+金边，与正红背景形成鲜明对比 */
+        .main-container {
+            background-color: #f5eedc;
+            /* 米色底色 */
+            border: 3px solid #ffd700;
+            /* 亮金边 */
+            border-radius: 20px;
+            padding: 40px 60px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .main-container.hidden {
+            display: none;
+        }
+
+
+        /* 开始旅行按钮 - 正红渐变+金边，更鲜艳 */
+        .travel-btn {
+            background: linear-gradient(90deg, #e62b2b 0%, #d92121 50%, #e62b2b 100%);
+            border: 2px solid #ffd700;
+            border-radius: 50px;
+            padding: 15px 60px;
+            font-size: 36px;
+            color: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 5px 0 #a81a1a;
+            transition: all 0.2s ease;
+            user-select: none;
+            margin-bottom: 20px;
+        }
+
+        .travel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #a81a1a;
+        }
+
+        .travel-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #a81a1a;
+        }
+
+        .travel-btn .icon {
+            font-size: 32px;
+        }
+
+        /* 按钮下方提示文字 */
+        .hint-text {
+            color: #d92121;
+            /* 正红色文字 */
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* 天干地支装饰文字 */
+        .ganzhi-text {
+            color: #ffd700;
+            /* 亮金色 */
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .ganzhi-text .star {
+            color: #fff9c4;
+            /* 浅金色 */
+            font-size: 20px;
+        }
+
+        /* 年份动画区域样式 */
+        .animation-container {
+            background-color: #f5eedc;
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .animation-container.show {
+            display: block;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 30px;
+            color: #d92121;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .year-timeline {
+            font-size: 56px;
+            font-weight: bold;
+            color: #d92121;
+            margin: 30px 0;
+            height: 70px;
+            line-height: 70px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .year-timeline::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: shine 1s infinite linear;
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
+        }
+
+        .zodiac-info {
+            margin-top: 25px;
+            font-size: 36px;
+            color: #d92121;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .zodiac-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        .cycle-info {
+            margin-top: 20px;
+            font-size: 32px;
+            color: #d92121;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.5s;
+            font-weight: bold;
+        }
+
+        .cycle-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 新增：下一个目的地样式 */
+        .next-destination {
+            margin-top: 30px;
+            font-size: 28px;
+            color: #ffd700;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.8s;
+            font-weight: bold;
+            text-decoration: underline;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .next-destination.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .next-destination:hover {
+            color: #23a8fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 核心容器 -->
+    <div class="main-container">
+        <!-- 开始旅行按钮 -->
+        <div class="travel-btn" id="travelBtn">
+            <span class="icon">🏮</span>
+            开始旅行
+            <span class="icon">🧧</span>
+        </div>
+
+        <!-- 提示文字 -->
+        <div class="hint-text">点击上方按钮 · 展开新春时间线</div>
+
+        <!-- 天干地支装饰 -->
+        <div class="ganzhi-text">
+            <span class="star">⭐</span>
+            你好旅行者，准备好开始旅行了吗？
+            <span class="star">⭐</span>
+        </div>
+    </div>
+
+    <!-- 年份动画区域 -->
+    <div class="animation-container" id="animationContainer">
+        <h3 class="modal-title">新春纪年 · 辞旧迎新</h3>
+        <div class="year-timeline" id="yearTimeline">2024</div>
+        <!-- 新增：下一个目的地文字 -->
+        <div class="zodiac-info" id="zodiacInfo">甲辰年</div>
+        <div class="cycle-info" id="cycleInfo">龙年</div>
+        <div class="next-destination" id="nextDestination">河北严查烟花爆竹，点击这里去放电子烟花！</div>
+
+    </div>
+
+    <script>
+        // ========== 可自定义配置项 ==========
+        const CONFIG = {
+            targetYear: 2026,        // 目标年份
+            startYear: 2005,         // 时间线起始年份
+            zodiac: "马",            // 对应生肖
+            heavenlyStemEarthlyBranch: "丙午", // 天干地支
+            jumpLink: "fireworks.html" // 跳转链接（可修改为目标链接）
+        };
+        // ====================================
+
+        // 获取DOM元素
+        const mainContainer = document.querySelector('.main-container');
+        const travelBtn = document.getElementById('travelBtn');
+        const animationContainer = document.getElementById('animationContainer');
+        const yearTimeline = document.getElementById('yearTimeline');
+        const zodiacInfo = document.getElementById('zodiacInfo');
+        const cycleInfo = document.getElementById('cycleInfo');
+        const nextDestination = document.getElementById('nextDestination'); // 新增
+
+        // 标记是否已经点击过
+        let isClicked = false;
+
+        // 点击按钮触发年份滚动动画
+        travelBtn.addEventListener('click', () => {
+            if (isClicked) return; // 防止重复点击
+
+            // 隐藏主容器
+            mainContainer.classList.add('hidden');
+
+            // 显示动画区域
+            animationContainer.classList.add('show');
+
+            // 执行年份滚动动画
+            animateYearScroll();
+        });
+
+        // 年份滚动动画函数
+        function animateYearScroll() {
+            let currentYear = CONFIG.startYear;
+            const speed = 80; // 滚动速度（数值越小越快）
+            const increment = 1; // 每次增加的年份
+
+            // 设置初始显示的年份
+            yearTimeline.textContent = currentYear;
+
+            // 年份滚动定时器
+            const yearInterval = setInterval(() => {
+                currentYear += increment;
+                yearTimeline.textContent = currentYear;
+
+                // 到达目标年份时停止滚动
+                if (currentYear >= CONFIG.targetYear) {
+                    clearInterval(yearInterval);
+                    yearTimeline.textContent = CONFIG.targetYear;
+
+                    // 更新生肖和天干地支文本
+                    zodiacInfo.textContent = `${CONFIG.heavenlyStemEarthlyBranch}年`;
+                    cycleInfo.textContent = `${CONFIG.zodiac}年大吉`;
+
+                    // 显示生肖、天干地支和下一个目的地动画
+                    setTimeout(() => {
+                        zodiacInfo.classList.add('show');
+                        cycleInfo.classList.add('show');
+                        nextDestination.classList.add('show'); // 新增：显示下一个目的地
+                    }, 300);
+                }
+            }, speed);
+        }
+
+        // 新增：点击下一个目的地跳转链接
+        nextDestination.addEventListener('click', () => {
+            window.location.href = CONFIG.jumpLink;
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>烟花祝福页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: "Microsoft YaHei", sans-serif;
+            cursor: pointer;
+        }
+
+        #fireworksCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .blessing {
+            position: absolute;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff85a2, 0 0 30px #ffc0cb;
+
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease-out, transform 0.8s ease;
+            transform: scale(0);
+        }
+
+        /* 底部按钮同步配色 */
+        .next-page-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            z-index: 3;
+            cursor: pointer;
+            background: linear-gradient(to right, #585466, #6e6a7a, #585466);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: blur(0.9px) contrast(0.85) brightness(0.9) saturate(0.7);
+            text-shadow: 0 0 10px rgba(68, 64, 78, 0.2), 0 0 20px rgba(48, 45, 56, 0.1);
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .next-page-btn:hover {
+            transform: translateX(-50%) scale(1.08);
+            filter: blur(0.7px) contrast(0.9) brightness(0.95) saturate(0.8);
+            text-shadow: 0 0 12px rgba(78, 74, 88, 0.3), 0 0 22px rgba(58, 55, 66, 0.15);
+        }
+
+        .audio-tip {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 24px;
+            text-shadow: 0 0 10px #fff;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 10px;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .audio-tip.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="fireworksCanvas"></canvas>
+    <!-- 首次点击引导提示 -->
+    <div class="audio-tip" id="audioTip">点击屏幕任意位置发射烟花 🎆</div>
+    <div class="next-page-btn" id="nextPageBtn">点击继续旅行</div>
+
+    <script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const audioTip = document.getElementById('audioTip');
+
+        // 状态变量
+        let particles = [];         // 爆炸后的烟花粒子
+        let meteors = [];           // 流星数组
+        let flyingFireworks = [];   // 飞行中的烟花弹
+        let audioInitiated = false; // 标记音效是否已授权（仅用于首次授权）
+
+        // 画布尺寸适配
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 祝福语列表
+        const blessings = [
+            "新年快乐", "万事如意", "心想事成", "阖家幸福",
+            "前程似锦", "平安喜乐", "财源广进", "健康长寿",
+            "好运连连", "事事顺心"
+        ];
+
+        // 烟花配置
+        const FIREWORK_CONFIG = {
+            particleCount: 200,     // 爆炸粒子数量
+            maxSpeed: 10,           // 粒子最大速度
+            minSpeed: 3,            // 粒子最小速度
+            gravity: 0.03,          // 粒子重力系数
+            fadeSpeed: 0.97,        // 粒子速度衰减
+            flyDuration: 1500,      // 飞行时长（毫秒）- 改为2秒
+            fireworkSize: 5,        // 飞行中烟花弹的大小
+            colors: [               // 烟花颜色列表
+                '#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#00ffff', '#0000ff',
+                '#8b00ff', '#ff69b4', '#ffffff', '#ffa500', '#ff1493', '#00fa9a'
+            ],
+            shapes: ['circle', 'heart', 'star', 'petal'], // 可选形状
+            shapeOutlineWidth: 1,   // 形状轮廓宽度
+            shapeFillOpacity: 0.8,  // 形状填充透明度
+            outlineColor: '#ffffff' // 轮廓颜色（增强对比度）
+        };
+
+        // 流星配置
+        const METEOR_CONFIG = {
+            minCount: 1,            // 最小流星数量
+            maxCount: 7,            // 最大流星数量
+            spawnInterval: 8000,    // 流星生成间隔（8秒）
+            speedRange: [5, 15],    // 流星速度范围
+            lengthRange: [50, 150], // 流星长度范围
+            alphaRange: [0.5, 1]    // 流星透明度范围
+        };
+
+        // ========== 音效初始化逻辑（仅用于首次授权） ==========
+        function initAudio() {
+            if (audioInitiated) return;
+            audioInitiated = true; // 仅标记授权状态，不再创建单个Audio对象
+            audioTip.classList.add('hidden');
+        }
+
+        // 安全播放音效的函数（核心修改：每次创建新Audio实例）
+        function playFireworkSound() {
+            // 首次点击先完成授权
+            if (!audioInitiated) {
+                initAudio();
+            }
+            // 每次播放都创建新的Audio对象，实现叠加播放
+            const fireworkAudio = new Audio('images/光厂音效_60333_礼花升空爆炸声.mp3');
+            fireworkAudio.volume = 0.7;
+            fireworkAudio.preload = 'auto';
+
+            try {
+                fireworkAudio.play().catch(err => {
+                    console.log('音效播放失败（非关键错误）:', err);
+                });
+                // 播放完毕后释放资源，避免内存泄漏
+                fireworkAudio.addEventListener('ended', () => {
+                    fireworkAudio.remove();
+                });
+            } catch (err) {
+                console.log('播放音效时出错:', err);
+            }
+        }
+
+        // ========== 绘制不同形状的工具函数 ==========
+        const ShapeDrawer = {
+            // 圆形（带轮廓）
+            circle: function (ctx, x, y, size, fillColor, outlineColor, outlineWidth, alpha) {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                // 绘制填充圆
+                ctx.fillStyle = fillColor;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                // 绘制轮廓
+                ctx.strokeStyle = outlineColor;
+                ctx.lineWidth = outlineWidth;
+                ctx.stroke();
+                ctx.restore();
+            },
+
+            // 心形（带轮廓）
+            heart: function (ctx, x, y, size, fillColor, outlineColor, outlineWidth, alpha) {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.translate(x, y);
+                ctx.scale(size / 10, size / 10); // 缩放适配尺寸
+                // 绘制填充心形
+                ctx.fillStyle = fillColor;
+                ctx.beginPath();
+                ctx.moveTo(0, -5);
+                ctx.bezierCurveTo(5, -10, 10, -5, 0, 5);
+                ctx.bezierCurveTo(-10, -5, -5, -10, 0, -5);
+                ctx.closePath();
+                ctx.fill();
+                // 绘制轮廓
+                ctx.strokeStyle = outlineColor;
+                ctx.lineWidth = outlineWidth;
+                ctx.stroke();
+                ctx.restore();
+            },
+
+            // 星形（5角，带轮廓）
+            star: function (ctx, x, y, size, fillColor, outlineColor, outlineWidth, alpha) {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.translate(x, y);
+                // 绘制填充星形
+                ctx.fillStyle = fillColor;
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    const angle = (i * 2 * Math.PI / 5) - Math.PI / 2;
+                    const r = i % 2 === 0 ? size : size / 2;
+                    const px = Math.cos(angle) * r;
+                    const py = Math.sin(angle) * r;
+                    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.fill();
+                // 绘制轮廓
+                ctx.strokeStyle = outlineColor;
+                ctx.lineWidth = outlineWidth;
+                ctx.stroke();
+                ctx.restore();
+            },
+            // 八角星形（带轮廓）
+            petal: function (ctx, x, y, size, fillColor, outlineColor, outlineWidth, alpha) {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.translate(x, y);
+                // 绘制填充星形
+                ctx.fillStyle = fillColor;
+                ctx.beginPath();
+                for (let i = 0; i < 16; i++) {
+                    const angle = (i * 2 * Math.PI / 16) - Math.PI / 2;
+                    const radius = i % 2 === 0 ? size : size / 3;
+                    const px = Math.cos(angle) * radius;
+                    const py = Math.sin(angle) * radius;
+                    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.fill();
+                // 绘制轮廓
+                ctx.strokeStyle = outlineColor;
+                ctx.lineWidth = outlineWidth;
+                ctx.stroke();
+                ctx.restore();
+            }
+        };
+
+        // ========== 飞行烟花弹类 ==========
+        class FlyingFirework {
+            constructor(targetX, targetY) {
+                // 起始位置：页面底部随机X坐标，Y坐标为画布底部
+                this.startX = Math.random() * canvas.width;
+                this.startY = canvas.height;
+                // 目标位置：鼠标点击位置
+                this.targetX = targetX;
+                this.targetY = targetY;
+                // 飞行相关参数
+                this.startTime = Date.now();          // 开始飞行时间
+                this.duration = FIREWORK_CONFIG.flyDuration; // 飞行时长（2秒）
+                this.currentX = this.startX;          // 当前X坐标
+                this.currentY = this.startY;          // 当前Y坐标
+                // 烟花弹样式
+                this.color = FIREWORK_CONFIG.colors[Math.floor(Math.random() * FIREWORK_CONFIG.colors.length)];
+                this.size = FIREWORK_CONFIG.fireworkSize;
+                // 随机选择本次烟花爆炸的形状
+                this.shape = FIREWORK_CONFIG.shapes[Math.floor(Math.random() * FIREWORK_CONFIG.shapes.length)];
+                // 标记是否已爆炸
+                this.exploded = false;
+            }
+
+            // 更新飞行位置
+            update() {
+                if (this.exploded) return;
+
+                // 计算已飞行时间占总时长的比例（0~1）
+                const elapsed = Date.now() - this.startTime;
+                const progress = Math.min(elapsed / this.duration, 1);
+
+                // 线性插值计算当前位置（匀速飞行）
+                this.currentX = this.startX + (this.targetX - this.startX) * progress;
+                this.currentY = this.startY + (this.targetY - this.startY) * progress;
+
+                // 到达目标位置（进度=1），触发爆炸
+                if (progress >= 1) {
+                    this.explode();
+                    this.exploded = true;
+                }
+            }
+
+            // 绘制飞行中的烟花弹（带轮廓）
+            draw() {
+                if (this.exploded) return;
+                // 飞行中的烟花弹用圆形+轮廓绘制
+                ShapeDrawer.circle(
+                    ctx,
+                    this.currentX,
+                    this.currentY,
+                    this.size,
+                    this.color,
+                    FIREWORK_CONFIG.outlineColor,
+                    FIREWORK_CONFIG.shapeOutlineWidth,
+                    1
+                );
+            }
+
+            // 爆炸生成粒子
+            explode() {
+                // 生成爆炸粒子（继承当前烟花的形状）
+                for (let i = 0; i < FIREWORK_CONFIG.particleCount; i++) {
+                    particles.push(new Particle(this.currentX, this.currentY, this.color, this.shape));
+                }
+
+                // 显示祝福语
+                this.showBlessing();
+            }
+
+            // 显示祝福语
+            showBlessing() {
+                const blessing = document.createElement('div');
+                blessing.className = 'blessing';
+                const randomText = blessings[Math.floor(Math.random() * blessings.length)];
+                blessing.textContent = randomText;
+                blessing.style.left = `${this.targetX}px`;
+                blessing.style.top = `${this.targetY}px`;
+                blessing.style.transform = 'translate(-50%, -50%) scale(0)';
+                document.body.appendChild(blessing);
+
+                setTimeout(() => {
+                    blessing.style.opacity = 1;
+                    blessing.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+
+                setTimeout(() => {
+                    blessing.style.opacity = 0;
+                    blessing.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                    setTimeout(() => {
+                        document.body.removeChild(blessing);
+                    }, 300);
+                }, 1200);
+            }
+
+            // 判断是否可移除
+            isDead() {
+                return this.exploded;
+            }
+        }
+
+        // ========== 烟花粒子类（爆炸后） ==========
+        class Particle {
+            constructor(x, y, baseColor, shape) {
+                this.x = x;
+                this.y = y;
+                // 使用烟花弹的颜色或随机颜色
+                this.color = baseColor || FIREWORK_CONFIG.colors[Math.floor(Math.random() * FIREWORK_CONFIG.colors.length)];
+                this.speed = Math.random() * (FIREWORK_CONFIG.maxSpeed - FIREWORK_CONFIG.minSpeed) + FIREWORK_CONFIG.minSpeed;
+                this.angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(this.angle) * this.speed;
+                this.vy = Math.sin(this.angle) * this.speed;
+                // 粒子尺寸（调整为更适合形状显示的大小）
+                this.size = Math.random() * 3 + 1.5;
+                this.life = 150;
+                this.alpha = 1;
+                // 继承烟花的形状（或随机）
+                this.shape = shape || FIREWORK_CONFIG.shapes[Math.floor(Math.random() * FIREWORK_CONFIG.shapes.length)];
+            }
+
+            update() {
+                this.vy += FIREWORK_CONFIG.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                this.alpha = this.life / 150;
+                this.vx *= FIREWORK_CONFIG.fadeSpeed;
+                this.vy *= FIREWORK_CONFIG.fadeSpeed;
+            }
+
+            draw() {
+                // 根据粒子的形状调用对应绘制方法
+                ShapeDrawer[this.shape](
+                    ctx,
+                    this.x,
+                    this.y,
+                    this.size,
+                    this.color,
+                    FIREWORK_CONFIG.outlineColor,
+                    FIREWORK_CONFIG.shapeOutlineWidth,
+                    this.alpha * FIREWORK_CONFIG.shapeFillOpacity
+                );
+            }
+        }
+
+        // ========== 流星类 ==========
+        class Meteor {
+            constructor() {
+                this.x = Math.random() * canvas.width * 1.5 - canvas.width * 0.25;
+                this.y = Math.random() * canvas.height * 0.3;
+                this.angle = Math.PI / 4 + Math.random() * Math.PI / 6;
+                this.speed = METEOR_CONFIG.speedRange[0] + Math.random() * (METEOR_CONFIG.speedRange[1] - METEOR_CONFIG.speedRange[0]);
+                this.length = METEOR_CONFIG.lengthRange[0] + Math.random() * (METEOR_CONFIG.lengthRange[1] - METEOR_CONFIG.lengthRange[0]);
+                this.alpha = METEOR_CONFIG.alphaRange[0] + Math.random() * (METEOR_CONFIG.alphaRange[1] - METEOR_CONFIG.alphaRange[0]);
+                this.color = Math.random() > 0.5 ? 'rgba(255,255,255,' : 'rgba(180,220,255,';
+            }
+
+            update() {
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                this.alpha -= 0.005;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.strokeStyle = this.color + this.alpha + ')';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(
+                    this.x - Math.cos(this.angle) * this.length,
+                    this.y - Math.sin(this.angle) * this.length
+                );
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            isDead() {
+                return this.alpha <= 0 || this.x > canvas.width * 1.2 || this.y > canvas.height;
+            }
+        }
+
+        // ========== 发射烟花函数 ==========
+        function launchFirework(targetX, targetY) {
+            // 初始化音频授权
+            initAudio();
+            // 音效在点击后同步触发（每次创建新实例）
+            playFireworkSound();
+            // 创建新的飞行烟花弹
+            flyingFireworks.push(new FlyingFirework(targetX, targetY));
+        }
+
+        // ========== 生成流星函数 ==========
+        function spawnMeteors() {
+            const count = METEOR_CONFIG.minCount + Math.floor(Math.random() * (METEOR_CONFIG.maxCount - METEOR_CONFIG.minCount + 1));
+            for (let i = 0; i < count; i++) {
+                meteors.push(new Meteor());
+            }
+        }
+
+        // ========== 动画主循环 ==========
+        function animate() {
+            // 半透明背景实现拖影
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 更新并绘制飞行中的烟花弹
+            for (let i = flyingFireworks.length - 1; i >= 0; i--) {
+                const fw = flyingFireworks[i];
+                fw.update();
+                fw.draw();
+                if (fw.isDead()) {
+                    flyingFireworks.splice(i, 1);
+                }
+            }
+
+            // 更新并绘制爆炸后的粒子
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // 更新并绘制流星
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                m.update();
+                m.draw();
+                if (m.isDead()) {
+                    meteors.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // 启动动画
+        animate();
+        // 定时生成流星
+        setInterval(spawnMeteors, METEOR_CONFIG.spawnInterval);
+        // 首次加载生成一批流星
+        spawnMeteors();
+
+        // ========== 页面跳转函数 ==========
+        function goToNextPage() {
+            window.location.href = 'main.html';
+        }
+
+        // ========== 事件绑定 ==========
+        // 点击页面发射烟花（排除按钮）
+        document.body.addEventListener('click', (e) => {
+            if (e.target !== nextPageBtn) {
+                launchFirework(e.clientX, e.clientY);
+            }
+        });
+
+        // 底部按钮点击跳转
+        nextPageBtn.addEventListener('click', goToNextPage);
+    </script>
+</body>
+
+</html>
