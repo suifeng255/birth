@@ -1,0 +1,1181 @@
+/* ==================== 全局样式重置 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft YaHei", 微软雅黑, "SimHei", 黑体, "STKaiti", 楷体, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    background-color: #f8f5f0;
+    color: #333;
+    overflow-x: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==================== 音乐选择弹窗 ==================== */
+.music-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.music-modal-content {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    width: 400px;
+}
+
+.music-modal-title {
+    font-size: 24px;
+    color: #e67e22; /* 马年主题色-橙色 */
+    margin-bottom: 30px;
+}
+
+.music-modal-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* ==================== 通用样式 ==================== */
+/* 容器 */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
+    border-radius: clamp(4px, 1vw, 8px);
+    font-size: clamp(14px, 1.5vw, 16px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.primary-btn {
+    background: linear-gradient(90deg, #e67e22, #d35400); /* 马年主题色-橙色渐变 */
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(230, 126, 34, 0.4);
+}
+
+.primary-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(230, 126, 34, 0.2);
+}
+
+.secondary-btn {
+    background: linear-gradient(90deg, #f1c40f, #f39c12); /* 金色渐变 */
+    color: #e67e22;
+    box-shadow: 0 4px 12px rgba(241, 196, 15, 0.3);
+}
+
+.secondary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(241, 196, 15, 0.4);
+}
+
+.secondary-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(241, 196, 15, 0.2);
+}
+
+/* 节区通用样式 */
+.section {
+    padding: clamp(40px, 8vw, 80px) 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: clamp(30px, 6vw, 60px);
+}
+
+.section-title {
+    font-size: clamp(24px, 4vw, 36px);
+    color: #e67e22; /* 马年主题色 */
+    margin-bottom: clamp(10px, 2vw, 20px);
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 12px);
+}
+
+.title-icon {
+    font-size: clamp(28px, 4.5vw, 40px);
+}
+
+.section-divider {
+    width: clamp(80px, 15vw, 150px);
+    height: clamp(3px, 0.5vw, 5px);
+    background: linear-gradient(90deg, #e67e22, #f1c40f); /* 马年主题渐变 */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+/* 加载动画 */
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loader-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.loader-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #e67e22; /* 马年主题色 */
+    display: inline-block;
+    margin: 0 5px;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+.loader-dot:nth-child(2) {
+    animation-delay: 0.2s;
+    background-color: #f1c40f; /* 金色 */
+}
+
+.loader-dot:nth-child(3) {
+    animation-delay: 0.4s;
+    background-color: #23a8fa; /* 蓝色 */
+}
+
+.loader-text {
+    font-size: clamp(16px, 2vw, 20px);
+    color: #e67e22;
+    font-weight: 600;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* ==================== 头部样式 ==================== */
+.header {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); /* 马年主题渐变 */
+    z-index: -2;
+}
+
+.header-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://picsum.photos/seed/horse/1920/1080");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.header-content {
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+    z-index: 1;
+    animation: fadeInUp 1s ease;
+}
+
+.year-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px 25px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    border: 2px solid #f1c40f;
+}
+
+.year-text {
+    font-size: clamp(24px, 5vw, 48px);
+    font-weight: bold;
+    color: #f1c40f;
+}
+
+.zodiac-text {
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-weight: 600;
+}
+
+.main-title {
+    font-size: clamp(36px, 8vw, 72px);
+    margin-bottom: clamp(15px, 3vw, 30px);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: clamp(18px, 3vw, 24px);
+    margin-bottom: clamp(30px, 6vw, 60px);
+    opacity: 0.9;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-btn {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ==================== 新春祝福模块 ==================== */
+.blessing-section {
+    background-color: #fff;
+}
+
+.blessing-container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(30px, 6vw, 60px);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.blessing-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: clamp(10px, 2vw, 20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.blessing-slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.blessing-card {
+    min-width: 100%;
+    padding: clamp(20px, 4vw, 40px);
+    background: linear-gradient(135deg, #f5eedc 0%, #fff9e8 100%);
+    border-radius: clamp(10px, 2vw, 20px);
+    text-align: center;
+}
+
+.blessing-card-title {
+    font-size: clamp(20px, 3.5vw, 32px);
+    color: #e67e22;
+    margin-bottom: clamp(15px, 3vw, 25px);
+}
+
+.blessing-card-content {
+    font-size: clamp(18px, 3vw, 28px);
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: clamp(20px, 4vw, 30px);
+}
+
+.blessing-card-author {
+    font-size: clamp(14px, 2vw, 18px);
+    color: #666;
+    font-style: italic;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(40px, 5vw, 60px);
+    height: clamp(40px, 5vw, 60px);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #e67e22;
+    font-size: clamp(20px, 3vw, 30px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.slider-btn:hover {
+    background-color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: clamp(10px, 2vw, 20px);
+}
+
+.next-btn {
+    right: clamp(10px, 2vw, 20px);
+}
+
+.custom-blessing {
+    background: linear-gradient(135deg, #fff9e8 0%, #f5eedc 100%);
+    padding: clamp(20px, 4vw, 40px);
+    border-radius: clamp(10px, 2vw, 20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.custom-title {
+    font-size: clamp(20px, 3vw, 28px);
+    color: #e67e22;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    text-align: center;
+}
+
+.blessing-input {
+    width: 100%;
+    height: clamp(100px, 20vw, 150px);
+    padding: clamp(10px, 2vw, 15px);
+    border: 2px solid #f1c40f;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    font-size: clamp(16px, 2vw, 18px);
+    line-height: 1.6;
+    resize: none;
+    background-color: #fff;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    transition: border-color 0.3s ease;
+}
+
+.blessing-input:focus {
+    border-color: #e67e22;
+    outline: none;
+}
+
+.generateBlessingBtn {
+    display: block;
+    margin: 0 auto clamp(20px, 4vw, 30px);
+}
+
+.custom-blessing-card {
+    width: 100%;
+    min-height: clamp(200px, 40vw, 300px);
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    border-radius: clamp(10px, 2vw, 20px);
+    padding: clamp(20px, 4vw, 30px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(230, 126, 34, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.custom-blessing-card.show {
+    opacity: 1;
+}
+
+.custom-blessing-content {
+    font-size: clamp(20px, 3.5vw, 32px);
+    line-height: 1.8;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== 马年运势模块 ==================== */
+.fortune-section {
+    background: linear-gradient(135deg, #f8f5f0 0%, #f5eedc 100%);
+}
+
+.fortune-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(30px, 6vw, 60px);
+}
+
+.zodiac-selector {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.zodiac-tabs {
+    display: flex;
+    gap: clamp(10px, 2vw, 15px);
+    width: max-content;
+    margin: 0 auto;
+}
+
+.zodiac-tab {
+    padding: clamp(8px, 1.5vw, 12px) clamp(15px, 3vw, 20px);
+    background-color: #fff;
+    border-radius: clamp(20px, 4vw, 30px);
+    font-size: clamp(14px, 2vw, 16px);
+    font-weight: 600;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.zodiac-tab.active {
+    background: linear-gradient(90deg, #e67e22, #d35400);
+    color: #fff;
+}
+
+.zodiac-tab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fortune-card {
+    background-color: #fff;
+    border-radius: clamp(10px, 2vw, 20px);
+    padding: clamp(20px, 4vw, 40px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.fortune-header {
+    text-align: center;
+    margin-bottom: clamp(20px, 4vw, 30px);
+}
+
+.fortune-zodiac {
+    font-size: clamp(24px, 4vw, 36px);
+    color: #e67e22;
+    margin-bottom: clamp(10px, 2vw, 15px);
+}
+
+.fortune-title {
+    font-size: clamp(18px, 3vw, 24px);
+    color: #666;
+}
+
+.fortune-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 40vw, 280px), 1fr));
+    gap: clamp(15px, 3vw, 20px);
+}
+
+.fortune-item {
+    background: linear-gradient(135deg, #f5eedc 0%, #fff9e8 100%);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    padding: clamp(15px, 3vw, 20px);
+    border-left: 4px solid #e67e22;
+}
+
+.fortune-item-title {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: #e67e22;
+    margin-bottom: clamp(10px, 2vw, 15px);
+    font-weight: 600;
+}
+
+.fortune-item-content {
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.6;
+    color: #333;
+}
+
+.fortune-tips {
+    background-color: #fff;
+    border-radius: clamp(10px, 2vw, 20px);
+    padding: clamp(20px, 4vw, 30px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.tips-title {
+    font-size: clamp(20px, 3vw, 24px);
+    color: #e67e22;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    text-align: center;
+}
+
+.tips-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 40vw, 300px), 1fr));
+    gap: clamp(10px, 2vw, 15px);
+}
+
+.tips-item {
+    padding: clamp(10px, 2vw, 15px);
+    background: linear-gradient(135deg, #fff9e8 0%, #f5eedc 100%);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(8px, 1.5vw, 12px);
+}
+
+.tips-icon {
+    font-size: clamp(18px, 2.5vw, 22px);
+    color: #f1c40f;
+    margin-top: 2px;
+}
+
+.tips-content {
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.6;
+    color: #333;
+}
+
+/* ==================== 新春小游戏模块 ==================== */
+.game-section {
+    background: linear-gradient(135deg, #f5eedc 0%, #f8f5f0 100%);
+}
+
+.game-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(300px, 50vw, 450px), 1fr));
+    gap: clamp(30px, 6vw, 60px);
+}
+
+.game-card {
+    background-color: #fff;
+    border-radius: clamp(10px, 2vw, 20px);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.game-title {
+    font-size: clamp(20px, 3vw, 28px);
+    color: #e67e22;
+    text-align: center;
+    padding: clamp(15px, 3vw, 20px);
+    border-bottom: 2px solid #f5eedc;
+}
+
+.game-preview {
+    width: 100%;
+    height: clamp(150px, 30vw, 200px);
+    overflow: hidden;
+}
+
+.game-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.game-card:hover .game-img {
+    transform: scale(1.05);
+}
+
+.game-btn {
+    display: block;
+    width: 80%;
+    margin: clamp(20px, 4vw, 30px) auto;
+}
+
+/* 游戏弹窗 */
+.game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
+}
+
+.game-modal.show {
+    display: block;
+}
+
+.game-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: clamp(10px, 2vw, 20px);
+    padding: clamp(20px, 4vw, 30px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.game-modal-close {
+    position: absolute;
+    top: clamp(15px, 3vw, 20px);
+    right: clamp(15px, 3vw, 20px);
+    width: clamp(30px, 4vw, 40px);
+    height: clamp(30px, 4vw, 40px);
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    color: #e67e22;
+    font-size: clamp(18px, 2.5vw, 22px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.game-modal-close:hover {
+    background-color: #e67e22;
+    color: #fff;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    padding-bottom: clamp(10px, 2vw, 15px);
+    border-bottom: 2px solid #f5eedc;
+}
+
+.game-modal-title {
+    font-size: clamp(20px, 3vw, 28px);
+    color: #e67e22;
+}
+
+.game-score {
+    font-size: clamp(16px, 2vw, 18px);
+    color: #333;
+    font-weight: 600;
+    background-color: #f5eedc;
+    padding: clamp(5px, 1vw, 8px) clamp(10px, 2vw, 15px);
+    border-radius: clamp(15px, 3vw, 20px);
+}
+
+.game-area {
+    width: 100%;
+    height: clamp(300px, 50vw, 400px);
+    background-color: #f8f5f0;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    margin-bottom: clamp(20px, 4vw, 30px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 接红包游戏样式增强 */
+.player {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(50px, 10vw, 80px);
+    height: clamp(50px, 10vw, 80px);
+    background-image: url("https://picsum.photos/seed/player/100/100");
+    background-size: cover;
+    border-radius: 50%;
+    z-index: 10;
+    transition: left 0.1s ease;
+}
+
+.red-packet {
+    position: absolute;
+    top: -50px;
+    width: clamp(40px, 8vw, 60px);
+    height: clamp(50px, 10vw, 70px);
+    background-image: url("https://picsum.photos/seed/redpacket/100/120");
+    background-size: cover;
+    animation: fall linear;
+    transition: all 0.2s ease;
+}
+
+.red-packet:hover {
+    transform: scale(1.1);
+}
+
+.obstacle {
+    position: absolute;
+    top: -50px;
+    width: clamp(40px, 8vw, 60px);
+    height: clamp(40px, 8vw, 60px);
+    background-image: url("https://picsum.photos/seed/obstacle/100/100");
+    background-size: cover;
+    animation: fall linear;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(clamp(300px, 50vw, 400px));
+    }
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f5eedc;
+    border-radius: 10px;
+}
+
+.stat-item {
+    font-size: 16px;
+    color: #e67e22;
+    font-weight: 600;
+}
+
+.game-rank {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #f5eedc;
+}
+
+.rank-title {
+    font-size: 18px;
+    color: #e67e22;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rank-list li {
+    padding: 8px 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-left: 3px solid #f1c40f;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: clamp(10px, 2vw, 20px);
+    flex-wrap: wrap;
+}
+
+.game-control-btn {
+    flex: 1;
+    min-width: clamp(80px, 15vw, 120px);
+}
+
+/* 猜灯谜游戏样式增强 */
+.riddle-progress {
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e67e22, #f1c40f);
+    width: 20%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+.riddle-question {
+    font-size: clamp(18px, 3vw, 24px);
+    color: #e67e22;
+    text-align: center;
+    padding: clamp(20px, 4vw, 30px);
+    background-color: #f5eedc;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    margin-bottom: clamp(20px, 4vw, 30px);
+}
+
+.riddle-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 30vw, 200px), 1fr));
+    gap: clamp(10px, 2vw, 15px);
+    margin-bottom: clamp(20px, 4vw, 30px);
+}
+
+.riddle-option {
+    padding: clamp(15px, 3vw, 20px);
+    background-color: #fff;
+    border: 2px solid #f1c40f;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    font-size: clamp(16px, 2vw, 18px);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.riddle-option:hover {
+    background-color: #f5eedc;
+}
+
+.riddle-option.correct {
+    background-color: #4CAF50;
+    color: #fff;
+    border-color: #4CAF50;
+}
+
+.riddle-option.incorrect {
+    background-color: #f44336;
+    color: #fff;
+    border-color: #f44336;
+}
+
+.riddle-feedback {
+    font-size: clamp(16px, 2vw, 18px);
+    text-align: center;
+    padding: clamp(10px, 2vw, 15px);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    margin-bottom: clamp(20px, 4vw, 30px);
+    display: none;
+}
+
+.riddle-feedback.show {
+    display: block;
+}
+
+.riddle-feedback.correct {
+    background-color: #e8f5e9;
+    color: #4CAF50;
+}
+
+.riddle-feedback.incorrect {
+    background-color: #ffebee;
+    color: #f44336;
+}
+
+.riddle-result {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background-color: #f5eedc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.riddle-result.show {
+    display: block;
+}
+
+.result-title {
+    font-size: 20px;
+    color: #e67e22;
+    margin-bottom: 15px;
+}
+
+.result-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.result-item {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* 生肖消消乐游戏样式 */
+.match-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 20px;
+    height: 100%;
+}
+
+.match-card {
+    background-color: #e67e22;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: rotateY(0deg);
+}
+
+.match-card.flipped {
+    background-color: #f1c40f;
+    color: #fff;
+    transform: rotateY(180deg);
+}
+
+.match-card.matched {
+    background-color: #4CAF50;
+    color: #fff;
+    transform: rotateY(180deg) scale(0.95);
+}
+
+/* ==================== 底部样式 ==================== */
+.footer {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    color: #fff;
+    padding: clamp(40px, 8vw, 80px) 0 clamp(20px, 4vw, 40px);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 4vw, 30px);
+}
+
+.footer-logo {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: bold;
+    color: #f1c40f;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.footer-links {
+    display: flex;
+    gap: clamp(15px, 3vw, 25px);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-link {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #fff;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    color: #f1c40f;
+}
+
+.footer-copyright {
+    font-size: clamp(12px, 1.5vw, 14px);
+    opacity: 0.7;
+    text-align: center;
+}
+
+.back-to-top {
+    width: clamp(40px, 5vw, 50px);
+    height: clamp(40px, 5vw, 50px);
+    border-radius: 50%;
+    background-color: #f1c40f;
+    color: #e67e22;
+    font-size: clamp(18px, 2.5vw, 22px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: fixed;
+    bottom: clamp(20px, 4vw, 30px);
+    right: clamp(20px, 4vw, 30px);
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== 响应式适配 ==================== */
+/* 平板适配 */
+@media screen and (max-width: 768px) {
+    .fortune-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tips-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-btn {
+        margin-top: 20px;
+    }
+    
+    .section {
+        min-height: auto;
+        padding: clamp(30px, 6vw, 60px) 0;
+    }
+    
+    .match-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 手机横屏适配 */
+@media screen and (orientation: landscape) and (max-width: 768px) {
+    .header {
+        height: 120vh;
+    }
+    
+    .game-area {
+        height: clamp(200px, 40vw, 300px);
+    }
+}
+
+/* 小屏手机适配 */
+@media screen and (max-width: 480px) {
+    .year-logo {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 20px;
+    }
+    
+    .slider-btn {
+        width: clamp(30px, 4vw, 40px);
+        height: clamp(30px, 4vw, 40px);
+        font-size: clamp(16px, 2.5vw, 20px);
+    }
+    
+    .modal-content {
+        padding: clamp(15px, 3vw, 20px);
+    }
+    
+    .game-modal-content {
+        padding: clamp(15px, 3vw, 20px);
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .match-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
