@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,236 +14,456 @@
             font-family: "Microsoft YaHei", 微软雅黑, "SimHei", 黑体, "STKaiti", 楷体, sans-serif;
         }
 
-        /* 页面主体样式 - 核心调整垂直布局，适配手机屏幕 */
+        /* 页面主体样式 - 纯正新春红背景 */
         body {
             background: linear-gradient(135deg, #d92121 0%, #c11e1e 50%, #a81a1a 100%);
             min-height: 100vh;
-            /* 关键调整：从justify-content: center改为flex-start，增加顶部内边距，避免内容偏下 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            /* 手机端顶部留合理间距，适配状态栏 */
-            padding: 40px 15px 20px;
+            justify-content: center;
+            padding: 15px; /* 移动端减少内边距 */
             overflow-x: hidden;
+            touch-action: manipulation; /* 优化移动端触摸行为 */
+            /* 新增：修复移动端flex布局垂直居中的兼容性 */
+            min-height: -webkit-fill-available;
         }
 
-        /* 核心容器 - 优化手机端尺寸和间距 */
+        /* 核心容器 - 响应式适配 */
         .main-container {
             background-color: #f5eedc;
-            border: 3px solid #ffd700;
-            border-radius: 20px;
-            /* 调整内边距，增加上下padding，让内容更舒展 */
-            padding: 40px 20px;
-            width: 90%;
-            max-width: 500px; /* 限制最大宽度，适配手机横向尺寸 */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border: clamp(2px, 1vw, 3px) solid #ffd700; /* 响应式边框 */
+            border-radius: clamp(15px, 3vw, 20px); /* 响应式圆角 */
+            padding: clamp(20px, 5vw, 40px) clamp(30px, 7vw, 60px); /* 响应式内边距 */
+            width: 95%; /* 移动端更宽 */
+            max-width: 800px;
+            box-shadow: 0 clamp(5px, 2vw, 10px) clamp(15px, 4vw, 30px) rgba(0, 0, 0, 0.3);
             text-align: center;
-            /* 调整margin，让容器在屏幕中位置更合理 */
-            margin: 0 auto 30px;
-            /* 增加最小高度，保证容器视觉比例 */
-            min-height: 60vh;
+            position: relative;
+            margin-bottom: clamp(30px, 6vw, 50px);
+            /* 新增：移动端容器自适应高度，避免内容溢出导致按钮偏移 */
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
+            flex: 0 1 auto;
         }
 
-        /* 开始旅行按钮 - 优化手机端大小和比例 */
+        .main-container.hidden {
+            display: none;
+        }
+
+        /* 开始旅行按钮 - 响应式适配（核心修复） */
         .travel-btn {
             background: linear-gradient(90deg, #e62b2b 0%, #d92121 50%, #e62b2b 100%);
-            border: 3px solid #ffd700;
-            border-radius: 60px;
-            /* 调整按钮内边距，适配手机触控 */
-            padding: 18px 40px;
-            font-size: 30px;
+            border: clamp(1.5px, 0.8vw, 2px) solid #ffd700;
+            border-radius: 50px;
+            padding: clamp(12px, 4vw, 18px) clamp(25px, 7vw, 50px); /* 优化内边距比例 */
+            font-size: clamp(18px, 4.5vw, 32px); /* 调整字体大小适配 */
             color: #fff;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            box-shadow: 0 6px 0 #a81a1a;
-            margin: 0 auto 25px;
+            gap: clamp(8px, 2.5vw, 15px);
+            box-shadow: 0 clamp(3px, 1vw, 5px) 0 #a81a1a;
+            transition: all 0.2s ease;
+            user-select: none;
+            margin-bottom: clamp(15px, 3vw, 20px);
+            /* 新增：固定按钮最小点击区域，避免过小 */
+            min-height: clamp(44px, 10vw, 60px);
+            min-width: clamp(200px, 60vw, 350px);
+            /* 修复移动端触摸反馈 */
             -webkit-tap-highlight-color: transparent;
-            /* 按钮宽度适配 */
-            width: 80%;
+            touch-action: manipulation;
+            /* 新增：防止按钮内容换行导致偏移 */
+            white-space: nowrap;
+        }
+
+        .travel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 clamp(4px, 1.5vw, 7px) 0 #a81a1a;
         }
 
         .travel-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 3px 0 #a81a1a;
+            box-shadow: 0 clamp(2px, 0.8vw, 3px) 0 #a81a1a;
+            /* 修复:active状态位置偏移 */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
         }
 
-        /* 文本样式 - 优化手机端字体大小和间距 */
+        .travel-btn .icon {
+            font-size: clamp(16px, 3.5vw, 28px);
+            /* 新增：图标垂直居中 */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* 按钮下方提示文字 */
         .hint-text {
             color: #d92121;
-            font-size: 18px;
-            margin-bottom: 30px;
+            font-size: clamp(14px, 2.5vw, 18px);
+            margin-bottom: clamp(20px, 4vw, 30px);
             font-style: italic;
-            line-height: 1.6;
+            /* 新增：防止文字溢出 */
+            max-width: 90%;
+            word-wrap: break-word;
         }
 
+        /* 天干地支装饰文字 */
         .ganzhi-text {
             color: #ffd700;
-            font-size: 22px;
+            font-size: clamp(16px, 3vw, 24px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 2vw, 15px);
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            line-height: 1.8;
+            flex-wrap: wrap; /* 移动端换行 */
+            /* 新增：防止内容溢出容器 */
+            max-width: 90%;
         }
 
-        /* 年份展示区域 - 同步优化布局 */
+        .ganzhi-text .star {
+            color: #fff9c4;
+            font-size: clamp(14px, 2.5vw, 20px);
+        }
+
+        /* 年份动画区域样式 - 响应式 */
         .animation-container {
             background-color: #f5eedc;
-            border: 3px solid #ffd700;
-            border-radius: 20px;
-            padding: 30px 20px;
-            width: 90%;
-            max-width: 500px;
+            border: clamp(2px, 1vw, 3px) solid #ffd700;
+            border-radius: clamp(15px, 3vw, 20px);
+            padding: clamp(20px, 5vw, 40px);
+            width: 95%;
+            max-width: 700px;
             text-align: center;
             display: none;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            min-height: 60vh;
+            box-shadow: 0 clamp(5px, 2vw, 10px) clamp(15px, 4vw, 30px) rgba(0, 0, 0, 0.3);
+            margin-bottom: clamp(20px, 4vw, 30px);
+            /* 新增：适配移动端布局 */
+            flex: 0 1 auto;
         }
 
         .animation-container.show {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeInUp 0.8s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-title {
-            font-size: 24px;
+            font-size: clamp(20px, 4vw, 30px);
             color: #d92121;
-            margin-bottom: 20px;
+            margin-bottom: clamp(15px, 3vw, 25px);
             font-weight: bold;
         }
 
         .year-timeline {
-            font-size: 45px;
+            font-size: clamp(30px, 8vw, 56px);
             font-weight: bold;
             color: #d92121;
-            margin: 20px 0;
-            height: 60px;
-            line-height: 60px;
+            margin: clamp(20px, 4vw, 30px) 0;
+            height: clamp(40px, 10vw, 70px);
+            line-height: clamp(40px, 10vw, 70px);
+            overflow: hidden;
+            position: relative;
+            /* 新增：防止文字溢出 */
+            text-align: center;
         }
 
-        .zodiac-info, .cycle-info {
-            font-size: 30px;
+        .year-timeline::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: shine 1s infinite linear;
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
+        }
+
+        .zodiac-info {
+            margin-top: clamp(15px, 3vw, 25px);
+            font-size: clamp(20px, 5vw, 36px);
             color: #d92121;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
             font-weight: bold;
-            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
+        .zodiac-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        .cycle-info {
+            margin-top: clamp(10px, 3vw, 20px);
+            font-size: clamp(18px, 4.5vw, 32px);
+            color: #d92121;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.5s;
+            font-weight: bold;
+        }
+
+        .cycle-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 新增：下一个目的地样式 - 响应式 */
         .next-destination {
-            font-size: 22px;
+            margin-top: clamp(20px, 4vw, 30px);
+            font-size: clamp(18px, 4vw, 28px);
             color: #ffd700;
             cursor: pointer;
-            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.8s;
+            font-weight: bold;
             text-decoration: underline;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            /* 移动端触摸优化 */
             -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            /* 新增：防止文字换行偏移 */
+            display: inline-block;
+            max-width: 90%;
+            word-wrap: break-word;
         }
 
-        /* 针对小屏手机的适配（375px以下） */
-        @media screen and (max-width: 375px) {
+        .next-destination.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .next-destination:hover {
+            color: #23a8fa;
+        }
+
+        /* 移动端横屏适配（增强版） */
+        @media screen and (orientation: landscape) and (max-width: 768px) {
             body {
-                padding: 30px 10px 15px;
+                padding: 10px;
+                /* 横屏时调整垂直居中方式，避免按钮挤压 */
+                justify-content: flex-start;
+                padding-top: 20px;
             }
             .main-container, .animation-container {
-                width: 95%;
-                padding: 30px 15px;
-                min-height: 55vh;
+                width: 90%;
+                padding: 15px 20px;
+                margin-bottom: 20px;
+                /* 横屏时容器最小高度限制 */
+                min-height: auto;
             }
             .travel-btn {
-                padding: 15px 30px;
-                font-size: 26px;
-                width: 90%;
+                padding: 10px 30px;
+                font-size: 18px;
+                min-height: 44px;
+                min-width: 180px;
+                /* 横屏按钮位置修正 */
+                margin-top: 10px;
             }
+            /* 横屏时调整年份动画区域高度 */
             .year-timeline {
-                font-size: 38px;
-            }
-            .zodiac-info, .cycle-info {
-                font-size: 26px;
+                height: clamp(30px, 8vw, 50px);
+                line-height: clamp(30px, 8vw, 50px);
             }
         }
 
-        /* 针对大屏手机的适配（600px以上） */
-        @media screen and (min-width: 600px) {
-            .main-container, .animation-container {
-                min-height: 50vh;
+        /* 新增：小屏手机专项适配（320px-480px） */
+        @media screen and (max-width: 480px) {
+            .main-container {
+                padding: clamp(15px, 4vw, 25px) clamp(20px, 5vw, 30px);
+            }
+            .travel-btn {
+                padding: clamp(10px, 3.5vw, 15px) clamp(20px, 6vw, 40px);
+                font-size: clamp(16px, 4vw, 24px);
+                min-width: 180px;
+                /* 小屏手机按钮居中强化 */
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .ganzhi-text {
+                /* 小屏文字换行优化 */
+                gap: 5px;
+                text-align: center;
+            }
+        }
+
+        /* 新增：修复iOS Safari下的滚动和点击问题 */
+        @supports (-webkit-overflow-scrolling: touch) {
+            .travel-btn {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+            body {
+                -webkit-overflow-scrolling: touch;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- 核心容器 -->
-    <div class="main-container" id="mainContainer">
+    <div class="main-container">
+        <!-- 开始旅行按钮 -->
         <div class="travel-btn" id="travelBtn">
-            <span>🏮</span>
+            <span class="icon">🏮</span>
             开始旅行
-            <span>🧧</span>
+            <span class="icon">🧧</span>
         </div>
+
+        <!-- 提示文字 -->
         <div class="hint-text">点击上方按钮 · 展开新春时间线</div>
-        <div class="ganzhi-text">⭐ 你好旅行者，准备好开始旅行了吗？ ⭐</div>
+
+        <!-- 天干地支装饰 -->
+        <div class="ganzhi-text">
+            <span class="star">⭐</span>
+            你好旅行者，准备好开始旅行了吗？
+            <span class="star">⭐</span>
+        </div>
     </div>
 
-    <!-- 年份展示区域 -->
+    <!-- 年份动画区域 -->
     <div class="animation-container" id="animationContainer">
         <h3 class="modal-title">新春纪年 · 辞旧迎新</h3>
         <div class="year-timeline" id="yearTimeline">2024</div>
-        <div class="zodiac-info">甲辰年</div>
-        <div class="cycle-info">龙年</div>
-        <div class="next-destination">河北严查烟花爆竹，点击这里去放电子烟花！</div>
+        <div class="zodiac-info" id="zodiacInfo">甲辰年</div>
+        <div class="cycle-info" id="cycleInfo">龙年</div>
+        <div class="next-destination" id="nextDestination">河北严查烟花爆竹，点击这里去放电子烟花！</div>
     </div>
 
     <script>
-        // 简化配置
+        // ========== 可自定义配置项 ==========
         const CONFIG = {
-            targetYear: 2026,
-            startYear: 2005,
-            zodiac: "马",
-            heavenlyStemEarthlyBranch: "丙午",
-            jumpLink: "fireworks.html"
+            targetYear: 2026,        // 目标年份
+            startYear: 2005,         // 时间线起始年份
+            zodiac: "马",            // 对应生肖
+            heavenlyStemEarthlyBranch: "丙午", // 天干地支
+            jumpLink: "fireworks.html" // 跳转链接（可修改为目标链接）
         };
+        // ====================================
 
         // 获取DOM元素
-        const mainContainer = document.getElementById('mainContainer');
+        const mainContainer = document.querySelector('.main-container');
         const travelBtn = document.getElementById('travelBtn');
         const animationContainer = document.getElementById('animationContainer');
         const yearTimeline = document.getElementById('yearTimeline');
-        const zodiacInfo = animationContainer.querySelector('.zodiac-info');
-        const cycleInfo = animationContainer.querySelector('.cycle-info');
-        const nextDestination = animationContainer.querySelector('.next-destination');
+        const zodiacInfo = document.getElementById('zodiacInfo');
+        const cycleInfo = document.getElementById('cycleInfo');
+        const nextDestination = document.getElementById('nextDestination');
 
-        // 点击按钮切换显示
-        travelBtn.addEventListener('click', () => {
-            mainContainer.style.display = 'none';
+        // 标记是否已经点击过
+        let isClicked = false;
+
+        // 兼容触摸和点击事件
+        function bindMultiEvent(element, eventNames, handler) {
+            const events = eventNames.split(' ');
+            events.forEach(event => {
+                element.addEventListener(event, (e) => {
+                    // 统一阻止默认行为，避免触摸时的滚动/缩放干扰
+                    if (event === 'touchstart') {
+                        e.preventDefault();
+                    }
+                    handler(e);
+                });
+            });
+        }
+
+        // 点击/触摸按钮触发年份滚动动画
+        bindMultiEvent(travelBtn, 'click touchstart', (e) => {
+            if (isClicked) return; // 防止重复点击
+            isClicked = true; // 立即标记为已点击，避免重复触发
+
+            // 隐藏主容器
+            mainContainer.classList.add('hidden');
+
+            // 显示动画区域
             animationContainer.classList.add('show');
+
+            // 执行年份滚动动画
             animateYearScroll();
         });
 
-        // 跳转链接
-        nextDestination.addEventListener('click', () => {
+        // 点击/触摸下一个目的地跳转链接
+        bindMultiEvent(nextDestination, 'click touchstart', (e) => {
             window.location.href = CONFIG.jumpLink;
         });
 
-        // 简化年份滚动动画
+        // 年份滚动动画函数
         function animateYearScroll() {
             let currentYear = CONFIG.startYear;
-            const speed = window.innerWidth <= 480 ? 40 : 60; // 移动端稍快
-            const timer = setInterval(() => {
-                currentYear++;
+            // 移动端加快滚动速度
+            const speed = window.innerWidth <= 768 ? 50 : 80; 
+            const increment = 1;
+
+            // 设置初始显示的年份
+            yearTimeline.textContent = currentYear;
+
+            // 年份滚动定时器
+            const yearInterval = setInterval(() => {
+                currentYear += increment;
                 yearTimeline.textContent = currentYear;
+
+                // 到达目标年份时停止滚动
                 if (currentYear >= CONFIG.targetYear) {
-                    clearInterval(timer);
+                    clearInterval(yearInterval);
+                    yearTimeline.textContent = CONFIG.targetYear;
+
+                    // 更新生肖和天干地支文本
                     zodiacInfo.textContent = `${CONFIG.heavenlyStemEarthlyBranch}年`;
                     cycleInfo.textContent = `${CONFIG.zodiac}年大吉`;
+
+                    // 显示生肖、天干地支和下一个目的地动画
+                    setTimeout(() => {
+                        zodiacInfo.classList.add('show');
+                        cycleInfo.classList.add('show');
+                        nextDestination.classList.add('show');
+                    }, 300);
                 }
             }, speed);
         }
+
+        // 新增：窗口大小变化时重新适配布局
+        window.addEventListener('resize', () => {
+            // 重置按钮状态（可选，根据需求调整）
+            if (window.innerWidth <= 768) {
+                mainContainer.style.display = mainContainer.classList.contains('hidden') ? 'none' : 'flex';
+            }
+        });
     </script>
 </body>
+
 </html>
