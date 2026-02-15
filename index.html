@@ -45,128 +45,65 @@
             display: none;
         }
 
-        /* ========== 电脑端按钮样式 ========== */
+        /* 开始旅行按钮 - 响应式适配（放大文字） */
         .travel-btn {
             background: linear-gradient(90deg, #e62b2b 0%, #d92121 50%, #e62b2b 100%);
-            border: 2px solid #ffd700;
+            border: clamp(1.5px, 0.8vw, 2px) solid #ffd700;
             border-radius: 50px;
-            padding: 15px 60px; 
-            font-size: 36px; 
+            padding: clamp(10px, 3vw, 15px) clamp(30px, 8vw, 60px); /* 响应式内边距 */
+            font-size: clamp(24px, 6vw, 42px); /* 放大按钮文字 */
             color: #fff;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            box-shadow: 0 5px 0 #a81a1a;
+            gap: clamp(10px, 3vw, 20px);
+            box-shadow: 0 clamp(3px, 1vw, 5px) 0 #a81a1a;
             transition: all 0.2s ease;
             user-select: none;
-            margin-bottom: 20px;
+            margin-bottom: clamp(15px, 3vw, 20px);
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
 
         .travel-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 0 #a81a1a;
+            box-shadow: 0 clamp(4px, 1.5vw, 7px) 0 #a81a1a;
         }
 
         .travel-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 3px 0 #a81a1a;
+            box-shadow: 0 clamp(2px, 0.8vw, 3px) 0 #a81a1a;
         }
 
-        /* 电脑端按钮图标 */
-        .travel-btn .pc-icon {
-            display: inline-block;
-            font-size: 32px;
-        }
-        /* 移动端按钮图标默认隐藏 */
-        .travel-btn .mobile-icon {
-            display: none;
+        .travel-btn .icon {
+            font-size: clamp(22px, 5vw, 36px); /* 放大按钮图标 */
         }
 
-        /* ========== 移动端按钮样式 (768px以下) ========== */
-        @media screen and (max-width: 768px) {
-            .travel-btn {
-                padding: 10px 30px; /* 移动端更小内边距 */
-                font-size: 20px; /* 移动端更小字体 */
-                gap: 10px; /* 移动端更小间距 */
-                box-shadow: 0 3px 0 #a81a1a;
-            }
-
-            .travel-btn:hover {
-                transform: none; /* 移动端取消hover位移 */
-                box-shadow: 0 3px 0 #a81a1a;
-            }
-
-            /* 移动端显示专属图标，隐藏电脑端图标 */
-            .travel-btn .pc-icon {
-                display: none;
-            }
-            .travel-btn .mobile-icon {
-                display: inline-block;
-                font-size: 18px;
-            }
-        }
-
-        /* 按钮下方提示文字（区分端） */
+        /* 按钮下方提示文字（放大） */
         .hint-text {
             color: #d92121;
-            font-size: 18px; /* 电脑端 */
-            margin-bottom: 30px;
+            font-size: clamp(16px, 3vw, 20px); /* 放大提示文字 */
+            margin-bottom: clamp(20px, 4vw, 30px);
             font-style: italic;
         }
-        @media screen and (max-width: 768px) {
-            .hint-text {
-                font-size: 14px; /* 移动端 */
-                margin-bottom: 20px;
-            }
-            /* 移动端提示文案差异化 */
-            .hint-text .mobile-only {
-                display: inline;
-            }
-            .hint-text .pc-only {
-                display: none;
-            }
-        }
-        /* 电脑端提示文案差异化 */
-        @media screen and (min-width: 769px) {
-            .hint-text .mobile-only {
-                display: none;
-            }
-            .hint-text .pc-only {
-                display: inline;
-            }
-        }
 
-        /* 天干地支装饰文字 */
+        /* 天干地支装饰文字（放大） */
         .ganzhi-text {
             color: #ffd700;
-            font-size: 24px; /* 电脑端 */
+            font-size: clamp(18px, 4vw, 28px); /* 放大装饰文字 */
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: clamp(8px, 2vw, 15px);
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             flex-wrap: wrap; /* 移动端换行 */
         }
-        @media screen and (max-width: 768px) {
-            .ganzhi-text {
-                font-size: 16px; /* 移动端 */
-                gap: 8px;
-            }
-        }
 
         .ganzhi-text .star {
             color: #fff9c4;
-            font-size: 20px; /* 电脑端 */
-        }
-        @media screen and (max-width: 768px) {
-            .ganzhi-text .star {
-                font-size: 14px; /* 移动端 */
-            }
+            font-size: clamp(16px, 3vw, 22px); /* 同步放大星星图标 */
         }
 
         /* 年份动画区域样式 - 响应式 */
@@ -201,35 +138,22 @@
         }
 
         .modal-title {
-            font-size: 30px; /* 电脑端 */
+            font-size: clamp(24px, 5vw, 36px); /* 放大标题文字 */
             color: #d92121;
-            margin-bottom: 25px;
+            margin-bottom: clamp(15px, 3vw, 25px);
             font-weight: bold;
-        }
-        @media screen and (max-width: 768px) {
-            .modal-title {
-                font-size: 20px; /* 移动端 */
-                margin-bottom: 15px;
-            }
         }
 
+        /* 年份时间线（放大核心数字） */
         .year-timeline {
-            font-size: 56px; /* 电脑端 */
+            font-size: clamp(36px, 9vw, 64px); /* 放大年份数字 */
             font-weight: bold;
             color: #d92121;
-            margin: 30px 0;
-            height: 70px;
-            line-height: 70px;
+            margin: clamp(20px, 4vw, 30px) 0;
+            height: clamp(48px, 11vw, 80px); /* 同步加高避免溢出 */
+            line-height: clamp(48px, 11vw, 80px); /* 行高与高度一致，垂直居中 */
             overflow: hidden;
             position: relative;
-        }
-        @media screen and (max-width: 768px) {
-            .year-timeline {
-                font-size: 30px; /* 移动端 */
-                margin: 20px 0;
-                height: 40px;
-                line-height: 40px;
-            }
         }
 
         .year-timeline::after {
@@ -249,21 +173,16 @@
             }
         }
 
+        /* 生肖信息（放大） */
         .zodiac-info {
-            margin-top: 25px;
-            font-size: 36px; /* 电脑端 */
+            margin-top: clamp(15px, 3vw, 25px);
+            font-size: clamp(24px, 6vw, 42px); /* 放大生肖文字 */
             color: #d92121;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        @media screen and (max-width: 768px) {
-            .zodiac-info {
-                margin-top: 15px;
-                font-size: 20px; /* 移动端 */
-            }
         }
 
         .zodiac-info.show {
@@ -281,20 +200,15 @@
             }
         }
 
+        /* 周期信息（放大） */
         .cycle-info {
-            margin-top: 20px;
-            font-size: 32px; /* 电脑端 */
+            margin-top: clamp(10px, 3vw, 20px);
+            font-size: clamp(22px, 5.5vw, 38px); /* 放大周期文字 */
             color: #d92121;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease 0.5s;
             font-weight: bold;
-        }
-        @media screen and (max-width: 768px) {
-            .cycle-info {
-                margin-top: 10px;
-                font-size: 18px; /* 移动端 */
-            }
         }
 
         .cycle-info.show {
@@ -302,10 +216,10 @@
             transform: translateY(0);
         }
 
-        /* 新增：下一个目的地样式 - 区分端 */
+        /* 下一个目的地（放大） */
         .next-destination {
-            margin-top: 30px;
-            font-size: 28px; /* 电脑端 */
+            margin-top: clamp(20px, 4vw, 30px);
+            font-size: clamp(20px, 5vw, 32px); /* 放大跳转文字 */
             color: #ffd700;
             cursor: pointer;
             opacity: 0;
@@ -317,12 +231,6 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        @media screen and (max-width: 768px) {
-            .next-destination {
-                margin-top: 20px;
-                font-size: 18px; /* 移动端 */
-            }
-        }
 
         .next-destination.show {
             opacity: 1;
@@ -333,7 +241,7 @@
             color: #23a8fa;
         }
 
-        /* 移动端横屏适配 */
+        /* 移动端横屏适配（同步调整横屏文字） */
         @media screen and (orientation: landscape) and (max-width: 768px) {
             body {
                 padding: 10px;
@@ -345,7 +253,7 @@
             }
             .travel-btn {
                 padding: 8px 30px;
-                font-size: 20px;
+                font-size: 26px; /* 横屏按钮文字也放大 */
             }
         }
     </style>
@@ -354,26 +262,20 @@
 <body>
     <!-- 核心容器 -->
     <div class="main-container">
-        <!-- 开始旅行按钮（区分端图标/文字） -->
+        <!-- 开始旅行按钮 -->
         <div class="travel-btn" id="travelBtn">
-            <span class="pc-icon">🏮</span> <!-- 电脑端图标 -->
-            <span class="mobile-icon">🧨</span> <!-- 移动端图标 -->
-            <span class="btn-text">开始旅行</span> <!-- 可通过JS动态修改端侧文字 -->
-            <span class="pc-icon">🧧</span> <!-- 电脑端图标 -->
-            <span class="mobile-icon">🐉</span> <!-- 移动端图标 -->
+            <span class="icon">🏮</span>
+            开始旅行
+            <span class="icon">🧧</span>
         </div>
 
-        <!-- 提示文字（区分端文案） -->
-        <div class="hint-text">
-            <span class="pc-only">点击上方按钮 · 展开新春时间线</span>
-            <span class="mobile-only">触摸按钮 · 开启新春旅程</span>
-        </div>
+        <!-- 提示文字 -->
+        <div class="hint-text">点击上方按钮 · 展开新春时间线</div>
 
         <!-- 天干地支装饰 -->
         <div class="ganzhi-text">
             <span class="star">⭐</span>
-            <span class="pc-only">你好旅行者，准备好开始旅行了吗？</span>
-            <span class="mobile-only">新春快乐，点击开启时光之旅～</span>
+            你好旅行者，准备好开始旅行了吗？
             <span class="star">⭐</span>
         </div>
     </div>
@@ -394,16 +296,7 @@
             startYear: 2005,         // 时间线起始年份
             zodiac: "马",            // 对应生肖
             heavenlyStemEarthlyBranch: "丙午", // 天干地支
-            jumpLink: "fireworks.html", // 跳转链接
-            // 新增：端侧差异化配置
-            btnText: {
-                pc: "开始旅行",      // 电脑端按钮文字
-                mobile: "触摸启程"    // 移动端按钮文字
-            },
-            scrollSpeed: {
-                pc: 80,              // 电脑端年份滚动速度（ms）
-                mobile: 50           // 移动端年份滚动速度（ms）
-            }
+            jumpLink: "fireworks.html" // 跳转链接（可修改为目标链接）
         };
         // ====================================
 
@@ -415,26 +308,9 @@
         const zodiacInfo = document.getElementById('zodiacInfo');
         const cycleInfo = document.getElementById('cycleInfo');
         const nextDestination = document.getElementById('nextDestination');
-        const btnTextEl = document.querySelector('.btn-text'); // 按钮文字元素
 
         // 标记是否已经点击过
         let isClicked = false;
-
-        // 判断设备类型：移动端/电脑端
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-                || window.innerWidth <= 768; // 兜底：屏幕宽度≤768视为移动端
-        }
-
-        // 初始化：根据设备类型设置按钮文字
-        function initBtnText() {
-            const isMobile = isMobileDevice();
-            btnTextEl.textContent = isMobile ? CONFIG.btnText.mobile : CONFIG.btnText.pc;
-        }
-        // 页面加载时初始化
-        initBtnText();
-        // 窗口大小变化时重新初始化（适配平板横/竖屏切换）
-        window.addEventListener('resize', initBtnText);
 
         // 兼容触摸和点击事件
         function bindMultiEvent(element, eventNames, handler) {
@@ -454,7 +330,7 @@
             // 显示动画区域
             animationContainer.classList.add('show');
 
-            // 执行年份滚动动画（区分端速度）
+            // 执行年份滚动动画
             animateYearScroll();
         });
 
@@ -464,11 +340,11 @@
             window.location.href = CONFIG.jumpLink;
         });
 
-        // 年份滚动动画函数（区分端速度）
+        // 年份滚动动画函数
         function animateYearScroll() {
             let currentYear = CONFIG.startYear;
-            // 读取端侧配置的滚动速度
-            const speed = isMobileDevice() ? CONFIG.scrollSpeed.mobile : CONFIG.scrollSpeed.pc;
+            // 移动端加快滚动速度
+            const speed = window.innerWidth <= 768 ? 50 : 80; 
             const increment = 1;
 
             // 设置初始显示的年份
